@@ -7,8 +7,28 @@
 engine(which = "standard")
 }
 \arguments{
-\item{which}{which base64 encoding engine to use.}
+\item{which}{default \code{"standard"}. The base64 encoding engine to be used.
+See details for more.}
 }
 \description{
 Choose an encoding engine
+}
+\details{
+\subsection{Engines}{
+
+By default, the "standard" base64 engine is used which is specified in
+\href{https://datatracker.ietf.org/doc/html/rfc4648#section-4}{RFC 4648}.
+
+Additional pre-configured base64 engines are provided these are:
+\itemize{
+\item \code{"standard_no_pad"}: uses the standard engine without padding
+\item \code{"url_safe"}: uses a url-safe alphabet with padding
+\item \code{"url_safe_no_pad"}: uses a url-safe alphabet without padding
+}
+
+See \href{https://docs.rs/base64/latest/base64/engine/general_purpose/index.html#constants}{base64 crate} for more.
+}
+}
+\examples{
+engine()
 }

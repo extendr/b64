@@ -7,12 +7,10 @@
 \usage{
 decode(what, eng = engine())
 
-decode_file(path, engine = engine())
+decode_file(path, eng = engine())
 }
 \arguments{
 \item{what}{a scalar character or a raw vector.}
-
-\item{engine}{a base64 engine. See \code{\link[=engine]{engine()}} for details.}
 }
 \value{
 \code{decode()} always returns a \code{blob} object. \code{decode_file()} returns a \code{raw} vector.

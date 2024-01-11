@@ -15,6 +15,6 @@ decode <- function(what, eng = engine()) {
 
 #' @export
 #' @rdname decode
-decode_file <- function(path, engine = engine()) {
-  decode_file_(path, engine)
+decode_file <- function(path, eng = engine()) {
+  decode_file_(path, eng)
 }

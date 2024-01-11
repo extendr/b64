@@ -35,46 +35,83 @@ Encode to base64 using `encode_string()`, `encode_raw()` and `encode_file()`.
 ```{r example}
 library(b64)
 
-hello <- encode_string("Hello, from extendr")
+hello <- encode("Hello, from extendr")
 hello
 ```
 
-Decode using `decode_string()` and `decode_raw()`
+Decode using `decode()`
 
 ```{r}
-decoded <- decode_string(hello)
+decoded <- decode(hello)
 decoded
 ```
 
 We can convert the decoded base64 to characters and see how it worked.
 
 ```{r}
-rawToChar(decoded)
+rawToChar(decoded[[1]])
 ```
 
-### From Files
 
-- uses streaming
+### Vectorized 
 
-### Vectorized
-
+Both `encode()` and `decode()` are vectorized. 
 
 ```{r}
-x <- unlist(lorem::ipsum(100))
+lorem <- unlist(lorem::ipsum(5, 1,  5))
+lorem
 
-encode(x) |> 
-  blob::as_blob() |> 
-  decode() |> 
-  lapply(rawToChar)
+encoded <- encode(lorem)
+encoded
 ```
+
+We can decode all of these using `decode()` as well. This will always return a `blob` object.
+
+```{r}
+decode(encoded)
+```
+
+
+## Encoding and decoding files
+
+`b64` is shines when encoding and decoding files. `encode_file()` and `decode_file()` both work by reading a file as a stream making it far faster than the alternative. 
+
+```{r message = FALSE, warn = FALSE}
+tmp <- tempfile() 
+fp <- "https://github.com/datablist/sample-csv-files/raw/main/files/leads/leads-100000.csv"
+
+download.file(fp, tmp)
+
+bench::mark(
+  b64 = encode_file(tmp),
+  base64enc = base64enc::base64encode(tmp)
+)
+```
+
+While the encoding is very impressive, better yet is the decoding performance. 
+
+```{r}
+# create a temp file
+tmp2 <- tempfile()
+
+# encode it and write to tmep file
+encode_file(tmp) |>
+  charToRaw() |>
+  writeBin(tmp2)
+
+bench::mark(
+  b64 = decode_file(tmp2),
+  base64enc = base64enc::base64decode(file(tmp2))
+)
+```
+
+
 
 
 ## TODO
 
-- [ ] high level `encode()` and `decode()` functions which abstract most everything away for simple use cases
 - [ ] provide interface to create custom encoder and decoders
   - custom alphabets
   - padding
   - url safe alphabets
   - streaming encoding and decoding
-- [ ] vectorize encoding and decoding
