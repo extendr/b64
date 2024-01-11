@@ -15,11 +15,9 @@ encode_file(path, eng = engine())
 \item{engine}{a base64 engine. See \code{\link[=engine]{engine()}} for details.}
 }
 \value{
-a base64 encoded string.
+\code{encode()} is vectorized and will return a character vector of the same
+lenght as \code{what}.
 }
 \description{
 Perform base 64 encoding.
-}
-\details{
-\code{encode()} performs base 64 encoding for a single
 }

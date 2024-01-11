@@ -2,13 +2,11 @@
 #'
 #' Perform base 64 encoding.
 #'
-#' @details
-#'
-#' `encode()` performs base 64 encoding for a single
-#'
 #' @param what a scalar character or a raw vector.
 #' @param engine a base64 engine. See [engine()] for details.
-#' @return a base64 encoded string.
+#' @return
+#' `encode()` is vectorized and will return a character vector of the same
+#' lenght as `what`.
 #' @export
 #' @name encode
 encode <- function(what, eng = engine()) {
