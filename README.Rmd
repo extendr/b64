@@ -1,0 +1,63 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# b64
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of b64 is to provide a very fast and lightweight base64 encoder and decoder and truly open sourced. 
+
+## Installation
+
+You can install the development version of b64 like so:
+
+```r
+pak::pak("extendr/b64")
+```
+
+## Example
+
+Encode to base64 using `encode_string()`, `encode_raw()` and `encode_file()`.
+
+```{r example}
+library(b64)
+
+hello <- encode_string("Hello, from extendr")
+hello
+```
+
+Decode using `decode_string()` and `decode_raw()`
+
+```{r}
+decoded <- decode_string(hello)
+decoded
+```
+
+We can convert the decoded base64 to characters and see how it worked.
+
+```{r}
+rawToChar(decoded)
+```
+
+
+## TODO
+
+- [ ] provide interface to create custom encoder and decoders
+  - custom alphabets
+  - padding
+  - url safe alphabets
+  - streaming encoding and decoding
+- [ ] vectorize encoding and decoding
