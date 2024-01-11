@@ -19,8 +19,7 @@ pak::pak("extendr/b64")
 
 ## Example
 
-Encode to base64 using `encode_string()`, `encode_raw()` and
-`encode_file()`.
+Encode to base64 using `encode()`.
 
 ``` r
 library(b64)
@@ -53,19 +52,17 @@ Both `encode()` and `decode()` are vectorized.
 ``` r
 lorem <- unlist(lorem::ipsum(5, 1,  5))
 lorem
-#> [1] "Lorem sed mattis."                                                  
-#> [2] "Elit metus erat curae vel potenti mauris!"                          
-#> [3] "Lorem habitasse dis rhoncus tempor."                                
-#> [4] "Consectetur suscipit convallis dictum sodales dictumst non euismod."
-#> [5] "Dolor nunc ligula penatibus."
+#> [1] "Sit eu eleifend id fringilla."  "Dolor ad neque metus metus."   
+#> [3] "Dolor at curae proin."          "Elit vivamus torquent taciti." 
+#> [5] "Dolor eget velit cum vehicula."
 
 encoded <- encode(lorem)
 encoded
-#> [1] "TG9yZW0gc2VkIG1hdHRpcy4="                                                                    
-#> [2] "RWxpdCBtZXR1cyBlcmF0IGN1cmFlIHZlbCBwb3RlbnRpIG1hdXJpcyE="                                    
-#> [3] "TG9yZW0gaGFiaXRhc3NlIGRpcyByaG9uY3VzIHRlbXBvci4="                                            
-#> [4] "Q29uc2VjdGV0dXIgc3VzY2lwaXQgY29udmFsbGlzIGRpY3R1bSBzb2RhbGVzIGRpY3R1bXN0IG5vbiBldWlzbW9kLg=="
-#> [5] "RG9sb3IgbnVuYyBsaWd1bGEgcGVuYXRpYnVzLg=="
+#> [1] "U2l0IGV1IGVsZWlmZW5kIGlkIGZyaW5naWxsYS4="
+#> [2] "RG9sb3IgYWQgbmVxdWUgbWV0dXMgbWV0dXMu"    
+#> [3] "RG9sb3IgYXQgY3VyYWUgcHJvaW4u"            
+#> [4] "RWxpdCB2aXZhbXVzIHRvcnF1ZW50IHRhY2l0aS4="
+#> [5] "RG9sb3IgZWdldCB2ZWxpdCBjdW0gdmVoaWN1bGEu"
 ```
 
 We can decode all of these using `decode()` as well. This will always
@@ -74,7 +71,7 @@ return a `blob` object.
 ``` r
 decode(encoded)
 #> <blob[5]>
-#> [1] blob[17 B] blob[41 B] blob[35 B] blob[67 B] blob[28 B]
+#> [1] blob[29 B] blob[27 B] blob[21 B] blob[29 B] blob[30 B]
 ```
 
 ## Encoding and decoding files
@@ -98,8 +95,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          40.3ms   41.7ms     22.2       24MB      0  
-#> 2 base64enc   111.7ms  116.1ms      8.69    66.5MB     17.4
+#> 1 b64          40.3ms   41.5ms     23.1       24MB      0  
+#> 2 base64enc   110.4ms  113.2ms      8.72    66.5MB     17.4
 ```
 
 While the encoding is very impressive, better yet is the decoding
@@ -121,8 +118,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64            17ms     18ms     53.4       18MB     9.72
-#> 2 base64enc     208ms    209ms      4.74      18MB     0
+#> 1 b64          17.8ms   20.2ms     49.3       18MB     9.39
+#> 2 base64enc   206.4ms  206.7ms      4.83      18MB     0
 ```
 
 ## Alternative engines

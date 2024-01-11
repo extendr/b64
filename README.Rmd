@@ -30,7 +30,7 @@ pak::pak("extendr/b64")
 
 ## Example
 
-Encode to base64 using `encode_string()`, `encode_raw()` and `encode_file()`.
+Encode to base64 using `encode()`.
 
 ```{r example}
 library(b64)
@@ -114,9 +114,6 @@ unsafe_chars <- charToRaw("-uwgVQA=")
 
 decode(unsafe_chars, engine("url_safe"))
 ```
-
-
-
 
 
 ## TODO
