@@ -11,35 +11,35 @@
 #' @useDynLib b64, .registration = TRUE
 NULL
 
-#' Encode to base64
-#' 
-#' @param input A string, raw vector, or file path.
-#' @export
-#' @name encode
-encode_string <- function(input) .Call(wrap__encode_string, input)
+encode_ <- function(what, engine) .Call(wrap__encode_, what, engine)
 
-#' @export
-#' @name encode
-encode_raw <- function(input) .Call(wrap__encode_raw, input)
+encode_file_ <- function(path, engine) .Call(wrap__encode_file_, path, engine)
 
-#' @export
-#' @name encode
-encode_file <- function(path) .Call(wrap__encode_file, path)
+encode_vectorized_ <- function(what, engine) .Call(wrap__encode_vectorized_, what, engine)
 
-#' Decode from base64
-#' 
-#' @param input A string or raw vector.
-#' @export
-#' @name decode
-decode_string <- function(input) .Call(wrap__decode_string, input)
+decode_ <- function(input, engine) .Call(wrap__decode_, input, engine)
 
-#' @export
-#' @name decode
-decode_raw <- function(input) .Call(wrap__decode_raw, input)
+decode_file_ <- function(path, engine) .Call(wrap__decode_file_, path, engine)
 
-chunk_encoding <- function(encoded, size) .Call(wrap__chunk_encoding, encoded, size)
+decode_vectorized_ <- function(what, engine) .Call(wrap__decode_vectorized_, what, engine)
 
-collapse_chunks <- function(chunks, newline) .Call(wrap__collapse_chunks, chunks, newline)
+alphabet_ <- function(which) .Call(wrap__alphabet_, which)
+
+new_alphabet <- function(chars) .Call(wrap__new_alphabet, chars)
+
+get_alphabet_ <- function(alphabet) .Call(wrap__get_alphabet_, alphabet)
+
+new_engine_ <- function(alphabet, config) .Call(wrap__new_engine_, alphabet, config)
+
+engine_ <- function(which) .Call(wrap__engine_, which)
+
+print_engine_ <- function(`_engine`) invisible(.Call(wrap__print_engine_, `_engine`))
+
+new_config_ <- function(encode_padding, decode_padding_trailing_bits, decode_padding_mode) .Call(wrap__new_config_, encode_padding, decode_padding_trailing_bits, decode_padding_mode)
+
+chunk_b64 <- function(encoded, size) .Call(wrap__chunk_b64, encoded, size)
+
+line_wrap <- function(chunks, newline) .Call(wrap__line_wrap, chunks, newline)
 
 
 # nolint end

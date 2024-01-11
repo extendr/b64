@@ -1,41 +1,84 @@
 use extendr_api::prelude::*;
-use base64::{prelude::*, alphabet, engine};
-use base64::engine::{general_purpose, DecodePaddingMode, GeneralPurposeConfig};
-use std::fs;
-use itertools::Itertools;
-
-/// Encode to base64
-/// 
-/// @param input A string, raw vector, or file path.
-/// @export
-/// @name encode
-#[extendr]
-fn encode_string(input: String) -> String {
-    general_purpose::STANDARD.encode(input)
-}
+use base64::{
+    alphabet,
+    engine::{
+        DecodePaddingMode,
+        general_purpose, GeneralPurpose, GeneralPurposeConfig
+    },
+    prelude::*, 
+    write::EncoderStringWriter,
+    read::DecoderReader
+};
+use itertools::{Itertools, Either};
+use std::io::Read;
 
 
-/// @export
-/// @name encode
-#[extendr]
-fn encode_raw(input: Raw) -> String {
-    general_purpose::STANDARD.encode(input.as_slice())
-}
-
-/// @export
-/// @name encode
-#[extendr]
-fn encode_file(path: String) -> String {
-    let fp = fs::read(&path);
-    if let Ok(contents) = fp {
-        general_purpose::STANDARD.encode(&contents)
-    } else {
-        extendr_api::throw_r_error("Unable to read file.")
+#[extendr(use_try_from = true)]
+fn encode_(what: Either<String, Raw>, engine: Robj) -> String {
+    let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
+    match what {
+        Either::Left(s) => {
+            eng.encode(s)
+        },
+        Either::Right(r) => eng.encode(r.as_slice())
     }
 }
 
+#[extendr(use_try_from = true)]
+fn encode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Strings {
+    let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
+    match what {
+        Either::Left(s) => {
+
+            s.into_iter()
+                .map(|s| {
+                    if s.is_na() {
+                        Rstr::na()
+                    } else {
+                        let to_encode = s.as_bytes();
+                        Rstr::from(eng.encode(to_encode))
+                    }
+                })
+                .collect::<Strings>()
+        },
+        Either::Right(r) => {
+            if !r.inherits("blob") {
+                throw_r_error("Expected a character vector or an object of class `blob`")
+            }
+
+            r
+                .into_iter()
+                .map(|(_, b)| {
+                    if b.is_null() {
+                        Rstr::na()
+                    } else {
+                        let raw: Raw = b.try_into().unwrap();
+                        Rstr::from(eng.encode(raw.as_slice()))
+                    }
+                })
+                .collect::<Strings>()
+        }
+    }
+}
+
+
 #[extendr]
-fn chunk_encoding(encoded: String, size: i32) -> Strings {
+fn encode_file_(
+    path: &str, 
+    engine: Robj
+) -> String {
+    let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
+    let eng = eng.addr();
+    let file = std::fs::File::open(path).unwrap();
+    let mut reader = std::io::BufReader::new(file);
+    let mut encoder = EncoderStringWriter::new(eng);
+    std::io::copy(&mut reader, &mut encoder).unwrap();
+    encoder.into_inner()
+
+}
+
+#[extendr]
+fn chunk_b64(encoded: String, size: i32) -> Strings {
     if size % 4 != 0  {
         extendr_api::throw_r_error("Chunk size must be a multiple of 4.");
     }
@@ -53,30 +96,80 @@ fn line_wrap(chunks: Strings, newline: &str) -> String {
     chunks.into_iter().join(newline)
 }
 
- 
-/// Decode from base64
-/// 
-/// @param input A string or raw vector.
-/// @export
-/// @name decode
-#[extendr]
-fn decode_string(input: String) -> Vec<u8> {
-    let res = general_purpose::STANDARD.decode(input);
-    match res {
-        Ok(decoded) => decoded,
-        Err(_) => extendr_api::throw_r_error(&format!("Input could not be decoded"))
+#[extendr(use_try_from = true)]
+fn decode_(input: Either<String, Raw>, engine: Robj) -> Vec<u8> {
+    let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
+    match input {
+        Either::Left(s) => eng.decode(s).unwrap(),
+        Either::Right(r) => eng.decode(r.as_slice()).unwrap()
     }
+
 }
 
-/// @export
-/// @name decode
-#[extendr]
-fn decode_raw(input: Raw) -> Vec<u8> {
-    let res = general_purpose::STANDARD.decode(input.as_slice());
-    match res {
-        Ok(decoded) => decoded,
-        Err(_) => extendr_api::throw_r_error(&format!("Input could not be decoded"))
+#[extendr(use_try_from = true)]
+fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Robj {
+    let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
+    match what {
+        Either::Left(s) => {
+
+            s.into_iter()
+                .map(|s| {
+                    if s.is_na() {
+                        ().into_robj()
+                    } else {
+                        let to_encode = s.as_str();
+                        let decoded = eng.decode(to_encode);
+                        match decoded {
+                            Ok(d) => {
+                                let r = Raw::from_bytes(&d);
+                                r.into_robj()
+                            },
+                            Err(_) => ().into_robj()
+                            
+                        }
+                    }
+                })
+                .collect::<List>()
+                .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
+                .unwrap()
+        },
+        Either::Right(r) => {
+            if !r.inherits("blob") {
+                throw_r_error("Expected a character vector or an object of class `blob`")
+            }
+            r
+                .into_iter()
+                .map(|(_, b)| {
+                    if b.is_null() {
+                        ().into_robj()
+                    } else {
+                        let raw: Raw = b.try_into().unwrap();
+                        let decoded = eng.decode(raw.as_slice());
+                        match decoded {
+                            Ok(d) => Raw::from_bytes(&d).into_robj(),
+                            Err(_) => ().into_robj()
+                        }
+                    }
+                })
+                .collect::<List>()
+                .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
+                .unwrap()
+        }
     }
+       
+}
+
+
+#[extendr]
+fn decode_file_(path: &str, engine: Robj) -> Vec<u8> {
+    let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
+    let eng = eng.addr();
+    let file = std::fs::File::open(path).unwrap();
+    let mut reader = std::io::BufReader::new(file);
+    let mut decoder = DecoderReader::new(&mut reader, eng);
+    let mut result = Vec::new();
+    decoder.read_to_end(&mut result).unwrap();
+    result
 }
 
 // use a built-in alphabet
@@ -100,10 +193,11 @@ fn new_alphabet(chars: &str) ->  ExternalPtr<alphabet::Alphabet> {
     ExternalPtr::new(res)
 }
 
+// get alphabet as a string for printing
 #[extendr]
-fn print_alphabet(alphabet: Robj) {
+fn get_alphabet_(alphabet: Robj) -> String {
     let alph: ExternalPtr<alphabet::Alphabet> = alphabet.try_into().unwrap();
-    println!("{:?}", &alph);
+    alph.as_str().to_string()
 }
 
 // default configs 
@@ -132,15 +226,9 @@ fn new_config_(
 }
 
 
-/// Create base64 Engines
-/// 
-/// `engine()` creates a new `GeneralPurpose` engine. 
-/// 
-/// @param
-/// 
-/// @export
+
 #[extendr]
-fn engine_(which: &str) -> ExternalPtr<engine::GeneralPurpose> {
+fn engine_(which: &str) -> ExternalPtr<GeneralPurpose> {
     match which {
         "standard" => ExternalPtr::new(general_purpose::STANDARD),
         "standard_no_pad" => ExternalPtr::new(general_purpose::STANDARD_NO_PAD),
@@ -150,12 +238,18 @@ fn engine_(which: &str) -> ExternalPtr<engine::GeneralPurpose> {
     }
 }
 
+// need to figure out a nice print pattern here
 #[extendr]
-fn new_engine_(alphabet: Robj, config: Robj) -> ExternalPtr<engine::GeneralPurpose> {
+fn print_engine_(_engine: Robj) {
+    // let eng: ExternalPtr<engine::GeneralPurpose> = engine.try_into().unwrap();
+}
+
+#[extendr]
+fn new_engine_(alphabet: Robj, config: Robj) -> ExternalPtr<GeneralPurpose> {
     let alph: ExternalPtr<alphabet::Alphabet> = alphabet.try_into().unwrap();
     let conf: ExternalPtr<GeneralPurposeConfig> = config.try_into().unwrap();
     let inner = conf.addr();
-    let engine = general_purpose::GeneralPurpose::new(&alph, *conf);
+    let engine = general_purpose::GeneralPurpose::new(&alph, *inner);
     ExternalPtr::new(engine)
 }
 
@@ -166,20 +260,30 @@ fn new_engine_(alphabet: Robj, config: Robj) -> ExternalPtr<engine::GeneralPurpo
 extendr_module! {
     mod b64;
     // encoding
-    fn encode_string;
-    fn encode_raw;
-    fn encode_file;
+    fn encode_;
+    fn encode_file_;
+    fn encode_vectorized_;
+
     // decoding
-    fn decode_string;
-    fn decode_raw;
-    
-    // helpers
-    fn chunk_encoding;
-    fn line_wrap;
+    fn decode_;
+    fn decode_file_;
+    fn decode_vectorized_;
 
     // alphabets
     fn alphabet_;
     fn new_alphabet;
-    fn print_alphabet;
+    fn get_alphabet_;
+
+    // engines
+    fn new_engine_;
+    fn engine_;
+    fn print_engine_;
+
+    // config
+    fn new_config_;
+
+    // helpers
+    fn chunk_b64;
+    fn line_wrap;
 }
 

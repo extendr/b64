@@ -52,9 +52,26 @@ We can convert the decoded base64 to characters and see how it worked.
 rawToChar(decoded)
 ```
 
+### From Files
+
+- uses streaming
+
+### Vectorized
+
+
+```{r}
+x <- unlist(lorem::ipsum(100))
+
+encode(x) |> 
+  blob::as_blob() |> 
+  decode() |> 
+  lapply(rawToChar)
+```
+
 
 ## TODO
 
+- [ ] high level `encode()` and `decode()` functions which abstract most everything away for simple use cases
 - [ ] provide interface to create custom encoder and decoders
   - custom alphabets
   - padding

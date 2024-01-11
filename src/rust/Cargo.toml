@@ -9,6 +9,6 @@ crate-type = [ 'staticlib' ]
 name = 'b64'
 
 [dependencies]
-base64 = "0.21.6"
-extendr-api = '*'
+base64 = "0.21.7"
+extendr-api = {version = "*", features = ["either"]}
 itertools = "0.12.0"
