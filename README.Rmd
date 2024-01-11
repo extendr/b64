@@ -74,7 +74,7 @@ decode(encoded)
 
 ## Encoding and decoding files
 
-`b64` is shines when encoding and decoding files. `encode_file()` and `decode_file()` both work by reading a file as a stream making it far faster than the alternative. 
+`b64` shines when encoding and decoding files. `encode_file()` and `decode_file()` both work by reading a file as a stream making it far faster than the alternative. 
 
 ```{r message = FALSE, warn = FALSE}
 tmp <- tempfile() 
@@ -104,6 +104,17 @@ bench::mark(
   base64enc = base64enc::base64decode(file(tmp2))
 )
 ```
+
+## Alternative engines 
+
+Out of the box, `b64` provides a number of pre-configured engines that can be used. The function `engine()` allows you to choose one of these different engines For example, `engine("url_safe")` provides a standard engine that uses a url-safe alphabet with padding.
+
+```{r}
+unsafe_chars <- charToRaw("-uwgVQA=")
+
+decode(unsafe_chars, engine("url_safe"))
+```
+
 
 
 

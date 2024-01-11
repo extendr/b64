@@ -53,19 +53,19 @@ Both `encode()` and `decode()` are vectorized.
 ``` r
 lorem <- unlist(lorem::ipsum(5, 1,  5))
 lorem
-#> [1] "Dolor aliquet maecenas est nascetur."                  
-#> [2] "Ipsum cum pharetra taciti tempus!"                     
-#> [3] "Amet duis viverra fames?"                              
-#> [4] "Ipsum curae primis gravida risus auctor mauris aptent."
-#> [5] "Amet laoreet ad dictumst non dapibus semper."
+#> [1] "Lorem sed mattis."                                                  
+#> [2] "Elit metus erat curae vel potenti mauris!"                          
+#> [3] "Lorem habitasse dis rhoncus tempor."                                
+#> [4] "Consectetur suscipit convallis dictum sodales dictumst non euismod."
+#> [5] "Dolor nunc ligula penatibus."
 
 encoded <- encode(lorem)
 encoded
-#> [1] "RG9sb3IgYWxpcXVldCBtYWVjZW5hcyBlc3QgbmFzY2V0dXIu"                        
-#> [2] "SXBzdW0gY3VtIHBoYXJldHJhIHRhY2l0aSB0ZW1wdXMh"                            
-#> [3] "QW1ldCBkdWlzIHZpdmVycmEgZmFtZXM/"                                        
-#> [4] "SXBzdW0gY3VyYWUgcHJpbWlzIGdyYXZpZGEgcmlzdXMgYXVjdG9yIG1hdXJpcyBhcHRlbnQu"
-#> [5] "QW1ldCBsYW9yZWV0IGFkIGRpY3R1bXN0IG5vbiBkYXBpYnVzIHNlbXBlci4="
+#> [1] "TG9yZW0gc2VkIG1hdHRpcy4="                                                                    
+#> [2] "RWxpdCBtZXR1cyBlcmF0IGN1cmFlIHZlbCBwb3RlbnRpIG1hdXJpcyE="                                    
+#> [3] "TG9yZW0gaGFiaXRhc3NlIGRpcyByaG9uY3VzIHRlbXBvci4="                                            
+#> [4] "Q29uc2VjdGV0dXIgc3VzY2lwaXQgY29udmFsbGlzIGRpY3R1bSBzb2RhbGVzIGRpY3R1bXN0IG5vbiBldWlzbW9kLg=="
+#> [5] "RG9sb3IgbnVuYyBsaWd1bGEgcGVuYXRpYnVzLg=="
 ```
 
 We can decode all of these using `decode()` as well. This will always
@@ -74,12 +74,12 @@ return a `blob` object.
 ``` r
 decode(encoded)
 #> <blob[5]>
-#> [1] blob[36 B] blob[33 B] blob[24 B] blob[54 B] blob[44 B]
+#> [1] blob[17 B] blob[41 B] blob[35 B] blob[67 B] blob[28 B]
 ```
 
 ## Encoding and decoding files
 
-`b64` is shines when encoding and decoding files. `encode_file()` and
+`b64` shines when encoding and decoding files. `encode_file()` and
 `decode_file()` both work by reading a file as a stream making it far
 faster than the alternative.
 
@@ -98,8 +98,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          39.3ms   40.9ms     24.3       24MB      0  
-#> 2 base64enc   111.7ms  112.9ms      8.78    66.5MB     17.6
+#> 1 b64          40.3ms   41.7ms     22.2       24MB      0  
+#> 2 base64enc   111.7ms  116.1ms      8.69    66.5MB     17.4
 ```
 
 While the encoding is very impressive, better yet is the decoding
@@ -121,8 +121,23 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          16.1ms   16.9ms     56.3       18MB     9.39
-#> 2 base64enc     208ms  209.1ms      4.73      18MB     0
+#> 1 b64            17ms     18ms     53.4       18MB     9.72
+#> 2 base64enc     208ms    209ms      4.74      18MB     0
+```
+
+## Alternative engines
+
+Out of the box, `b64` provides a number of pre-configured engines that
+can be used. The function `engine()` allows you to choose one of these
+different engines For example, `engine("url_safe")` provides a standard
+engine that uses a url-safe alphabet with padding.
+
+``` r
+unsafe_chars <- charToRaw("-uwgVQA=")
+
+decode(unsafe_chars, engine("url_safe"))
+#> <blob[1]>
+#> [1] blob[5 B]
 ```
 
 ## TODO
