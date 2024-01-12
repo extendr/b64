@@ -2,22 +2,30 @@
 % Please edit documentation in R/encode.R
 \name{encode}
 \alias{encode}
+\alias{decode}
 \alias{encode_file}
-\title{Encode as base64}
+\alias{decode_file}
+\title{Encode and decode using base64}
 \usage{
 encode(what, eng = engine())
 
+decode(what, eng = engine())
+
 encode_file(path, eng = engine())
+
+decode_file(path, eng = engine())
 }
 \arguments{
-\item{what}{a scalar character or a raw vector.}
+\item{what}{a character, raw, or blob vector}
 
-\item{engine}{a base64 engine. See \code{\link[=engine]{engine()}} for details.}
+\item{eng}{a base64 engine. See \code{\link[=engine]{engine()}} for details.}
+
+\item{path}{a path to a base64 encoded file.}
 }
 \value{
-\code{encode()} is vectorized and will return a character vector of the same
-lenght as \code{what}.
+Both \code{encode()} and \code{decode()} are vectorized. They will return a character
+and blob vector the same length as \code{what}, respectively.
 }
 \description{
-Perform base 64 encoding.
+Encode and decode using base64
 }

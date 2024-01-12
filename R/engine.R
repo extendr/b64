@@ -1,7 +1,8 @@
-#' Choose an encoding engine
+#' Create an encoding engine
 #'
 #' @param which default `"standard"`. The base64 encoding engine to be used.
 #'  See details for more.
+#' @param .alphabet an object of class `alphabet` as created with [`alphabet()`] or [`new_alphabet()`]
 #' @details
 #'
 #' ## Engines
@@ -20,8 +21,39 @@
 #' @export
 #' @examples
 #' engine()
+#' new_engine(alphabet("bcrypt"), new_config())
 engine <- function(which = "standard") {
   provided <- c("standard", "standard_no_pad", "url_safe", "url_safe_no_pad")
   rlang::arg_match0(which, provided)
   structure(engine_(which), class = "engine")
+}
+
+#' @export
+#' @rdname engine
+new_engine <- function(.alphabet = alphabet(), .config = new_config()) {
+
+  if (!rlang::inherits_only(.alphabet, "alphabet")) {
+    cli::cli_abort(
+      c(
+        "{.arg .alphabet} is not an object of class {.cls alphabet}",
+        "*" = "use {.fn alphabet} for a standard base64 alphabet"
+      )
+    )
+  } else if (!rlang::inherits_only(.config, "b64_config")) {
+    cli::cli_abort(
+      c(
+        "{.arg config} is not a {.cls b64_config} object",
+        "*" = "create one with {.fn new_config}"
+      )
+    )
+  }
+
+  res <- new_engine_(.alphabet, .config)
+  structure(res, class = "engine")
+}
+
+#' @export
+print.engine <- function(x, ...) {
+  cat("<engine>")
+  invisible(x)
 }

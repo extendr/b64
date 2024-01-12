@@ -52,17 +52,19 @@ Both `encode()` and `decode()` are vectorized.
 ``` r
 lorem <- unlist(lorem::ipsum(5, 1,  5))
 lorem
-#> [1] "Sit eu eleifend id fringilla."  "Dolor ad neque metus metus."   
-#> [3] "Dolor at curae proin."          "Elit vivamus torquent taciti." 
-#> [5] "Dolor eget velit cum vehicula."
+#> [1] "Amet diam nascetur nisi ad pharetra ante?"         
+#> [2] "Sit massa eu morbi nostra mi."                     
+#> [3] "Dolor erat dui eu faucibus."                       
+#> [4] "Sit volutpat per ridiculus donec massa lacus duis?"
+#> [5] "Elit tempus neque phasellus laoreet maecenas ad?"
 
 encoded <- encode(lorem)
 encoded
-#> [1] "U2l0IGV1IGVsZWlmZW5kIGlkIGZyaW5naWxsYS4="
-#> [2] "RG9sb3IgYWQgbmVxdWUgbWV0dXMgbWV0dXMu"    
-#> [3] "RG9sb3IgYXQgY3VyYWUgcHJvaW4u"            
-#> [4] "RWxpdCB2aXZhbXVzIHRvcnF1ZW50IHRhY2l0aS4="
-#> [5] "RG9sb3IgZWdldCB2ZWxpdCBjdW0gdmVoaWN1bGEu"
+#> [1] "QW1ldCBkaWFtIG5hc2NldHVyIG5pc2kgYWQgcGhhcmV0cmEgYW50ZT8="            
+#> [2] "U2l0IG1hc3NhIGV1IG1vcmJpIG5vc3RyYSBtaS4="                            
+#> [3] "RG9sb3IgZXJhdCBkdWkgZXUgZmF1Y2lidXMu"                                
+#> [4] "U2l0IHZvbHV0cGF0IHBlciByaWRpY3VsdXMgZG9uZWMgbWFzc2EgbGFjdXMgZHVpcz8="
+#> [5] "RWxpdCB0ZW1wdXMgbmVxdWUgcGhhc2VsbHVzIGxhb3JlZXQgbWFlY2VuYXMgYWQ/"
 ```
 
 We can decode all of these using `decode()` as well. This will always
@@ -71,7 +73,7 @@ return a `blob` object.
 ``` r
 decode(encoded)
 #> <blob[5]>
-#> [1] blob[29 B] blob[27 B] blob[21 B] blob[29 B] blob[30 B]
+#> [1] blob[41 B] blob[29 B] blob[27 B] blob[50 B] blob[48 B]
 ```
 
 ## Encoding and decoding files
@@ -95,8 +97,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          40.3ms   41.5ms     23.1       24MB      0  
-#> 2 base64enc   110.4ms  113.2ms      8.72    66.5MB     17.4
+#> 1 b64          40.1ms   41.1ms     24.3       24MB      0  
+#> 2 base64enc   112.5ms  112.8ms      8.81    66.5MB     17.6
 ```
 
 While the encoding is very impressive, better yet is the decoding
@@ -118,8 +120,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          17.8ms   20.2ms     49.3       18MB     9.39
-#> 2 base64enc   206.4ms  206.7ms      4.83      18MB     0
+#> 1 b64          16.3ms   16.8ms     59.3       18MB     9.49
+#> 2 base64enc   207.6ms  207.6ms      4.82      18MB     2.41
 ```
 
 ## Alternative engines
@@ -130,11 +132,59 @@ different engines For example, `engine("url_safe")` provides a standard
 engine that uses a url-safe alphabet with padding.
 
 ``` r
-unsafe_chars <- charToRaw("-uwgVQA=")
+url_engine <- engine("url_safe")
+url_safe_encoded <- encode("\xfa\xec U", url_engine)
+url_safe_encoded
+#> [1] "-uwgVQ=="
+```
 
-decode(unsafe_chars, engine("url_safe"))
+If we try to decode this using the standard engine, we will encounter an
+error.
+
+``` r
+decode(url_safe_encoded)
+#> Error in decode_(what, eng): Invalid byte 45, offset 0.
+```
+
+We can use our new engine to decode it.
+
+``` r
+decode(url_safe_encoded, url_engine)
 #> <blob[1]>
-#> [1] blob[5 B]
+#> [1] blob[4 B]
+```
+
+### Custom Engines
+
+We can create custom engines with `new_engine()`. This allows us to
+provide our on alphabet and configuration.
+
+We can use one of the many predefined alphabets or create one our selves
+with `new_alphabet()`. We can also specify our engine config using
+`new_config()` which lets us choose whether or not to pad and how to
+handle decoding.
+
+``` r
+my_eng <- new_engine(
+  alphabet("crypt"),
+  new_config(TRUE, TRUE, "none")
+)
+```
+
+This engine can be used to encode or decode text.
+
+``` r
+txt <- "lorem ipsum sit dolor amet"
+
+encode(txt, my_eng)
+#> [1] "P4xmNKoUOL/nRKoUQqZo64FjP4xm643hNLE="
+```
+
+Compare this to the standard encoder:
+
+``` r
+encode(txt)
+#> [1] "bG9yZW0gaXBzdW0gc2l0IGRvbG9yIGFtZXQ="
 ```
 
 ## TODO

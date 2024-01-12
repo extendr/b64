@@ -86,8 +86,19 @@ fn line_wrap(chunks: Strings, newline: &str) -> String {
 fn decode_(input: Either<String, Raw>, engine: Robj) -> Robj {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     let res = match input {
-        Either::Left(s) => eng.decode(s).unwrap(),
-        Either::Right(r) => eng.decode(r.as_slice()).unwrap(),
+        Either::Left(s) => {
+            let res = eng.decode(s);
+            match res {
+                Ok(d) => d,
+                Err(e) => throw_r_error(e.to_string().as_str()),
+            }
+        },
+        Either::Right(r) => {
+            match eng.decode(r.as_slice()) {
+                Ok(d) => d,
+                Err(e) => throw_r_error(e.to_string().as_str()),
+            }
+        },
     };
 
     list!(Raw::from_bytes(&res))
@@ -171,9 +182,14 @@ fn alphabet_(which: &str) -> ExternalPtr<alphabet::Alphabet> {
 
 // Create new alphabet
 #[extendr]
-fn new_alphabet(chars: &str) -> ExternalPtr<alphabet::Alphabet> {
-    let res = alphabet::Alphabet::new(chars).unwrap();
-    ExternalPtr::new(res)
+fn new_alphabet_(chars: &str) -> ExternalPtr<alphabet::Alphabet> {
+    let res = alphabet::Alphabet::new(chars);
+
+    match res {
+        Ok(r) => ExternalPtr::new(r),
+        Err(e) => extendr_api::throw_r_error(&format!("Error creating alphabet: {}", e)),
+    }
+    
 }
 
 // get alphabet as a string for printing
@@ -209,6 +225,12 @@ fn new_config_(
 }
 
 #[extendr]
+fn print_config_(config: Robj) -> String {
+    let conf: ExternalPtr<GeneralPurposeConfig> = config.try_into().unwrap();
+    format!("{:#?}", conf)
+}
+
+#[extendr]
 fn engine_(which: &str) -> ExternalPtr<GeneralPurpose> {
     match which {
         "standard" => ExternalPtr::new(general_purpose::STANDARD),
@@ -221,8 +243,9 @@ fn engine_(which: &str) -> ExternalPtr<GeneralPurpose> {
 
 // need to figure out a nice print pattern here
 #[extendr]
-fn print_engine_(_engine: Robj) {
-    // let eng: ExternalPtr<engine::GeneralPurpose> = engine.try_into().unwrap();
+fn print_engine_(engine: Robj) -> String {
+    let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
+    format!("{:#?}", eng)
 }
 
 #[extendr]
@@ -251,7 +274,7 @@ extendr_module! {
 
     // alphabets
     fn alphabet_;
-    fn new_alphabet;
+    fn new_alphabet_;
     fn get_alphabet_;
 
     // engines
@@ -261,6 +284,7 @@ extendr_module! {
 
     // config
     fn new_config_;
+    fn print_config_;
 
     // helpers
     fn chunk_b64;

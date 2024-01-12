@@ -7,16 +7,37 @@
 alphabet(which = "standard")
 }
 \arguments{
-\item{which}{default \code{"standard"}. Which base64 alphabet to use.}
+\item{which}{default \code{"standard"}. Which base64 alphabet to use.
+See details for other values.}
+
+\item{chars}{a character scalar contains 64 unique characters.}
+}
+\value{
+an object of class \code{alphabet}
 }
 \description{
-Standard base64 alphabets
+Create an alphabet from a set of standard base64 alphabets, or use your own.
 }
 \details{
 \itemize{
-\item \code{"bcrypt"}: the bcrypt alphabet
+\item \code{"bcrypt"}: bcrypt alphabet
+\item \code{"bin_hex"}: alphabet used in BinHex 4.0 files
+\item \code{"crypt"}: crypt(3) alphabet (with . and / as the first two characters)
+\item \code{"imap_mutf7"}: alphabet used in IMAP-modified UTF-7 (with + and ,)
+\item \code{"standard"}: standard alphabet (with + and /) specified in RFC 4648
+\item \code{"url_safe"}: URL-safe alphabet (with - and _) specified in RFC 4648
 }
 
 See \href{https://docs.rs/base64/latest/base64/alphabet/index.html#constants}{base64 crate}
-for more details.
+from where these definitions come.
+}
+\examples{
+alphabet("standard")
+alphabet("bcrypt")
+alphabet("bin_hex")
+alphabet("crypt")
+alphabet("imap_mutf7")
+alphabet("url_safe")
+
+new_alphabet("qwertyuiop[]asdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890")
 }

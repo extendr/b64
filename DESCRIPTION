@@ -14,4 +14,5 @@ Config/rextendr/version: 0.3.1.9000
 SystemRequirements: Cargo (rustc package manager)
 Imports: 
     blob,
+    cli,
     rlang

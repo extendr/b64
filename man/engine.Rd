@@ -2,16 +2,21 @@
 % Please edit documentation in R/engine.R
 \name{engine}
 \alias{engine}
-\title{Choose an encoding engine}
+\alias{new_engine}
+\title{Create an encoding engine}
 \usage{
 engine(which = "standard")
+
+new_engine(.alphabet = alphabet(), .config = new_config())
 }
 \arguments{
 \item{which}{default \code{"standard"}. The base64 encoding engine to be used.
 See details for more.}
+
+\item{.alphabet}{an object of class \code{alphabet} as created with \code{\link[=alphabet]{alphabet()}} or \code{\link[=new_alphabet]{new_alphabet()}}}
 }
 \description{
-Choose an encoding engine
+Create an encoding engine
 }
 \details{
 \subsection{Engines}{
@@ -31,4 +36,5 @@ See \href{https://docs.rs/base64/latest/base64/engine/general_purpose/index.html
 }
 \examples{
 engine()
+new_engine(alphabet("bcrypt"), new_config())
 }

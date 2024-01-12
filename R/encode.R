@@ -1,12 +1,12 @@
-#' Encode as base64
+#' Encode and decode using base64
 #'
-#' Perform base 64 encoding.
+#' @param what a character, raw, or blob vector
+#' @param eng a base64 engine. See [engine()] for details.
+#' @param path a path to a base64 encoded file.
 #'
-#' @param what a scalar character or a raw vector.
-#' @param engine a base64 engine. See [engine()] for details.
 #' @return
-#' `encode()` is vectorized and will return a character vector of the same
-#' lenght as `what`.
+#' Both `encode()` and `decode()` are vectorized. They will return a character
+#' and blob vector the same length as `what`, respectively.
 #' @export
 #' @name encode
 encode <- function(what, eng = engine()) {
@@ -18,8 +18,34 @@ encode <- function(what, eng = engine()) {
   }
 }
 
+#' @rdname encode
+decode <- function(what, eng = engine()) {
+  n <- length(what)
+  if (inherits(what, "raw") || (n == 1 & inherits(what, "character"))) {
+    decode_(what, eng)
+  } else {
+    decode_vectorized_(what, eng)
+  }
+}
+
+
 #' @export
 #' @name encode
 encode_file <- function(path, eng = engine()) {
+  if (!file.exists(path)) {
+    cli::cli_abort("{.arg path} does not exist")
+  }
+
   encode_file_(path, eng)
+}
+
+
+#' @export
+#' @rdname encode
+decode_file <- function(path, eng = engine()) {
+  if (!file.exists(path)) {
+    cli::cli_abort("{.arg path} does not exist")
+  }
+
+  decode_file_(path, eng)
 }

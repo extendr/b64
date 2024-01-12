@@ -25,7 +25,7 @@ decode_vectorized_ <- function(what, engine) .Call(wrap__decode_vectorized_, wha
 
 alphabet_ <- function(which) .Call(wrap__alphabet_, which)
 
-new_alphabet <- function(chars) .Call(wrap__new_alphabet, chars)
+new_alphabet_ <- function(chars) .Call(wrap__new_alphabet_, chars)
 
 get_alphabet_ <- function(alphabet) .Call(wrap__get_alphabet_, alphabet)
 
@@ -33,9 +33,11 @@ new_engine_ <- function(alphabet, config) .Call(wrap__new_engine_, alphabet, con
 
 engine_ <- function(which) .Call(wrap__engine_, which)
 
-print_engine_ <- function(`_engine`) invisible(.Call(wrap__print_engine_, `_engine`))
+print_engine_ <- function(engine) .Call(wrap__print_engine_, engine)
 
 new_config_ <- function(encode_padding, decode_padding_trailing_bits, decode_padding_mode) .Call(wrap__new_config_, encode_padding, decode_padding_trailing_bits, decode_padding_mode)
+
+print_config_ <- function(config) .Call(wrap__print_config_, config)
 
 chunk_b64 <- function(encoded, size) .Call(wrap__chunk_b64, encoded, size)
 

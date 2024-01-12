@@ -109,10 +109,50 @@ bench::mark(
 
 Out of the box, `b64` provides a number of pre-configured engines that can be used. The function `engine()` allows you to choose one of these different engines For example, `engine("url_safe")` provides a standard engine that uses a url-safe alphabet with padding.
 
-```{r}
-unsafe_chars <- charToRaw("-uwgVQA=")
 
-decode(unsafe_chars, engine("url_safe"))
+```{r}
+url_engine <- engine("url_safe")
+url_safe_encoded <- encode("\xfa\xec U", url_engine)
+url_safe_encoded
+```
+
+If we try to decode this using the standard engine, we will encounter an error. 
+
+```{r error=TRUE}
+decode(url_safe_encoded)
+```
+
+We can use our new engine to decode it.
+
+```{r}
+decode(url_safe_encoded, url_engine)
+```
+
+### Custom Engines
+
+We can create custom engines with `new_engine()`. This allows us to provide our on alphabet and configuration. 
+
+We can use one of the many predefined alphabets or create one our selves with `new_alphabet()`. We can also specify our engine config using `new_config()` which lets us choose whether or not to pad and how to handle decoding. 
+
+```{r}
+my_eng <- new_engine(
+  alphabet("crypt"),
+  new_config(TRUE, TRUE, "none")
+)
+```
+
+This engine can be used to encode or decode text. 
+
+```{r}
+txt <- "lorem ipsum sit dolor amet"
+
+encode(txt, my_eng)
+```
+
+Compare this to the standard encoder: 
+
+```{r}
+encode(txt)
 ```
 
 
