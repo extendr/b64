@@ -4,10 +4,12 @@
 # b64
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/extendr/b64/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/extendr/b64/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of b64 is to provide a very fast and lightweight base64 encoder
-and decoder and truly open sourced.
+The goal of b64 is to provide a very fast, lightweight, and vectorized
+base64 encoder and decoder.
 
 ## Installation
 
@@ -52,19 +54,19 @@ Both `encode()` and `decode()` are vectorized.
 ``` r
 lorem <- unlist(lorem::ipsum(5, 1,  5))
 lorem
-#> [1] "Amet diam nascetur nisi ad pharetra ante?"         
-#> [2] "Sit massa eu morbi nostra mi."                     
-#> [3] "Dolor erat dui eu faucibus."                       
-#> [4] "Sit volutpat per ridiculus donec massa lacus duis?"
-#> [5] "Elit tempus neque phasellus laoreet maecenas ad?"
+#> [1] "Sit ligula senectus litora viverra consequat."          
+#> [2] "Consectetur vulputate vivamus sapien a ridiculus porta."
+#> [3] "Ipsum orci cras posuere lacus."                         
+#> [4] "Lorem nostra hendrerit nascetur vel duis consequat."    
+#> [5] "Adipiscing dui blandit vestibulum bibendum?"
 
 encoded <- encode(lorem)
 encoded
-#> [1] "QW1ldCBkaWFtIG5hc2NldHVyIG5pc2kgYWQgcGhhcmV0cmEgYW50ZT8="            
-#> [2] "U2l0IG1hc3NhIGV1IG1vcmJpIG5vc3RyYSBtaS4="                            
-#> [3] "RG9sb3IgZXJhdCBkdWkgZXUgZmF1Y2lidXMu"                                
-#> [4] "U2l0IHZvbHV0cGF0IHBlciByaWRpY3VsdXMgZG9uZWMgbWFzc2EgbGFjdXMgZHVpcz8="
-#> [5] "RWxpdCB0ZW1wdXMgbmVxdWUgcGhhc2VsbHVzIGxhb3JlZXQgbWFlY2VuYXMgYWQ/"
+#> [1] "U2l0IGxpZ3VsYSBzZW5lY3R1cyBsaXRvcmEgdml2ZXJyYSBjb25zZXF1YXQu"                
+#> [2] "Q29uc2VjdGV0dXIgdnVscHV0YXRlIHZpdmFtdXMgc2FwaWVuIGEgcmlkaWN1bHVzIHBvcnRhLg=="
+#> [3] "SXBzdW0gb3JjaSBjcmFzIHBvc3VlcmUgbGFjdXMu"                                    
+#> [4] "TG9yZW0gbm9zdHJhIGhlbmRyZXJpdCBuYXNjZXR1ciB2ZWwgZHVpcyBjb25zZXF1YXQu"        
+#> [5] "QWRpcGlzY2luZyBkdWkgYmxhbmRpdCB2ZXN0aWJ1bHVtIGJpYmVuZHVtPw=="
 ```
 
 We can decode all of these using `decode()` as well. This will always
@@ -73,7 +75,7 @@ return a `blob` object.
 ``` r
 decode(encoded)
 #> <blob[5]>
-#> [1] blob[41 B] blob[29 B] blob[27 B] blob[50 B] blob[48 B]
+#> [1] blob[45 B] blob[55 B] blob[30 B] blob[51 B] blob[43 B]
 ```
 
 ## Encoding and decoding files
@@ -97,8 +99,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          40.1ms   41.1ms     24.3       24MB      0  
-#> 2 base64enc   112.5ms  112.8ms      8.81    66.5MB     17.6
+#> 1 b64          39.8ms   41.3ms     24.0       24MB      0  
+#> 2 base64enc   112.1ms  115.2ms      8.56    66.5MB     17.1
 ```
 
 While the encoding is very impressive, better yet is the decoding
@@ -120,8 +122,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          16.3ms   16.8ms     59.3       18MB     9.49
-#> 2 base64enc   207.6ms  207.6ms      4.82      18MB     2.41
+#> 1 b64          16.1ms   16.8ms     56.1       18MB     9.34
+#> 2 base64enc   209.1ms  210.7ms      4.75      18MB     0
 ```
 
 ## Alternative engines
@@ -186,11 +188,3 @@ Compare this to the standard encoder:
 encode(txt)
 #> [1] "bG9yZW0gaXBzdW0gc2l0IGRvbG9yIGFtZXQ="
 ```
-
-## TODO
-
-- [ ] provide interface to create custom encoder and decoders
-  - custom alphabets
-  - padding
-  - url safe alphabets
-  - streaming encoding and decoding
