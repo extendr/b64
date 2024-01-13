@@ -2,9 +2,12 @@
 % Please edit documentation in R/alphabet.R
 \name{alphabet}
 \alias{alphabet}
+\alias{new_alphabet}
 \title{Standard base64 alphabets}
 \usage{
 alphabet(which = "standard")
+
+new_alphabet(chars)
 }
 \arguments{
 \item{which}{default \code{"standard"}. Which base64 alphabet to use.

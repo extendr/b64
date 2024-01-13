@@ -18,6 +18,7 @@ encode <- function(what, eng = engine()) {
   }
 }
 
+#' @export
 #' @rdname encode
 decode <- function(what, eng = engine()) {
   n <- length(what)

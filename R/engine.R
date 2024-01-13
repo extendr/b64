@@ -39,10 +39,10 @@ new_engine <- function(.alphabet = alphabet(), .config = new_config()) {
         "*" = "use {.fn alphabet} for a standard base64 alphabet"
       )
     )
-  } else if (!rlang::inherits_only(.config, "b64_config")) {
+  } else if (!rlang::inherits_only(.config, "engine_config")) {
     cli::cli_abort(
       c(
-        "{.arg config} is not a {.cls b64_config} object",
+        "{.arg config} is not a {.cls engine_config} object",
         "*" = "create one with {.fn new_config}"
       )
     )

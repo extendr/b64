@@ -37,7 +37,7 @@ alphabet <- function(which = "standard") {
   structure(alphabet_(which), class = "alphabet")
 }
 
-
+#' @rdname alphabet
 new_alphabet <- function(chars) {
   n <- nchar(chars)
   if (nchar(chars) != 64) {
@@ -58,4 +58,10 @@ print.alphabet <- function(x, ...) {
   cat("<alphabet>\n")
   cat(get_alphabet_(x))
   invisible(x)
+}
+
+
+#' @export
+as.character.alphabet <- function(x, ...) {
+  get_alphabet_(x)
 }

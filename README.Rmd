@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of b64 is to provide a very fast and lightweight base64 encoder and decoder and truly open sourced. 
+The goal of b64 is to provide a very fast, lightweight, and vectorized base64 encoder and decoder. 
 
 ## Installation
 
@@ -154,12 +154,3 @@ Compare this to the standard encoder:
 ```{r}
 encode(txt)
 ```
-
-
-## TODO
-
-- [ ] provide interface to create custom encoder and decoders
-  - custom alphabets
-  - padding
-  - url safe alphabets
-  - streaming encoding and decoding

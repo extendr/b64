@@ -17,7 +17,7 @@
 #' @param decode_padding_trailing_bits default `FALSE`. "If invalid trailing bits are present and this is true, those bits will be silently ignored." (See details for reference).
 #' @param decode_padding_mode default `"canonical"`. Other values are `"indifferent"` and `"none"`. See details for more.
 #' @export
-#' @return an object of class `b64_config`
+#' @return an object of class `engine_config`
 new_config <- function(
     encode_padding = TRUE,
     decode_padding_trailing_bits = FALSE,
@@ -35,19 +35,17 @@ new_config <- function(
     padding_mode
   )
 
-  structure(res, class = "b64_config")
+  structure(res, class = "engine_config")
 }
 
 # shoddy print method for the time being
 
 #' @export
-print.b64_config <- function(x, ...) {
+print.engine_config <- function(x, ...) {
   y <- print_config_(x)
-
-  z <- trimws(strsplit(y, "\n")[[1]][2:4])
-
-  cat("<b64_config>\n")
-  cat(gsub(",", "", z), sep = "\n")
+  # z <- trimws(strsplit(y, "\n")[[1]][2:4])
+  cat("<engine_config>\n")
+  # cat(gsub(",", "", z), sep = "\n")
   invisible(x)
 }
 

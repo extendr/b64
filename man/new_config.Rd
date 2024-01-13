@@ -18,7 +18,7 @@ new_config(
 \item{decode_padding_mode}{default \code{"canonical"}. Other values are \code{"indifferent"} and \code{"none"}. See details for more.}
 }
 \value{
-an object of class \code{b64_config}
+an object of class \code{engine_config}
 }
 \description{
 Create a custom encoding engine
