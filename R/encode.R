@@ -9,6 +9,17 @@
 #' and blob vector the same length as `what`, respectively.
 #' @export
 #' @name encode
+#' @examples
+#' # encode hello world
+#' encoded <- encode("Hello world")
+#' encoded
+#'
+#' # decode to a blob
+#' decoded <- decode(encoded)
+#' decoded
+#'
+#' # convert back to a character
+#' rawToChar(decoded[[1]])
 encode <- function(what, eng = engine()) {
   n <- length(what)
   if (inherits(what, "raw") || (n == 1 & inherits(what, "character"))) {

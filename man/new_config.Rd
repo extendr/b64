@@ -36,3 +36,7 @@ characters are also permitted
 }
 }
 }
+\examples{
+# create a new nonsensicle config
+new_config(FALSE, TRUE, "none")
+}

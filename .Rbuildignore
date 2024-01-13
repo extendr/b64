@@ -3,3 +3,5 @@
 ^src/\.cargo$
 ^README\.Rmd$
 ^LICENSE\.md$
+^src/rust/vendor$
+^\.github$

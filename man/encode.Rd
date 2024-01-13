@@ -29,3 +29,15 @@ and blob vector the same length as \code{what}, respectively.
 \description{
 Encode and decode using base64
 }
+\examples{
+# encode hello world
+encoded <- encode("Hello world")
+encoded
+
+# decode to a blob
+decoded <- decode(encoded)
+decoded
+
+# convert back to a character
+rawToChar(decoded[[1]])
+}

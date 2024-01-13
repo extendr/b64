@@ -18,6 +18,9 @@
 #' @param decode_padding_mode default `"canonical"`. Other values are `"indifferent"` and `"none"`. See details for more.
 #' @export
 #' @return an object of class `engine_config`
+#' @examples
+#' # create a new nonsensicle config
+#' new_config(FALSE, TRUE, "none")
 new_config <- function(
     encode_padding = TRUE,
     decode_padding_trailing_bits = FALSE,
@@ -38,14 +41,10 @@ new_config <- function(
   structure(res, class = "engine_config")
 }
 
-# shoddy print method for the time being
-
 #' @export
 print.engine_config <- function(x, ...) {
   y <- print_config_(x)
-  # z <- trimws(strsplit(y, "\n")[[1]][2:4])
   cat("<engine_config>\n")
-  # cat(gsub(",", "", z), sep = "\n")
   invisible(x)
 }
 

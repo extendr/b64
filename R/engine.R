@@ -2,7 +2,10 @@
 #'
 #' @param which default `"standard"`. The base64 encoding engine to be used.
 #'  See details for more.
-#' @param .alphabet an object of class `alphabet` as created with [`alphabet()`] or [`new_alphabet()`]
+#' @param .alphabet an object of class `alphabet` as created with
+#'  [`alphabet()`] or [`new_alphabet()`]
+#' @param .config an object of class `engine_config` as created with
+#'  [new_config()]
 #' @details
 #'
 #' ## Engines

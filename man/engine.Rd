@@ -13,7 +13,11 @@ new_engine(.alphabet = alphabet(), .config = new_config())
 \item{which}{default \code{"standard"}. The base64 encoding engine to be used.
 See details for more.}
 
-\item{.alphabet}{an object of class \code{alphabet} as created with \code{\link[=alphabet]{alphabet()}} or \code{\link[=new_alphabet]{new_alphabet()}}}
+\item{.alphabet}{an object of class \code{alphabet} as created with
+\code{\link[=alphabet]{alphabet()}} or \code{\link[=new_alphabet]{new_alphabet()}}}
+
+\item{.config}{an object of class \code{engine_config} as created with
+\code{\link[=new_config]{new_config()}}}
 }
 \description{
 Create an encoding engine

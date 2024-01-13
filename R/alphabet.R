@@ -37,6 +37,7 @@ alphabet <- function(which = "standard") {
   structure(alphabet_(which), class = "alphabet")
 }
 
+#' @export
 #' @rdname alphabet
 new_alphabet <- function(chars) {
   n <- nchar(chars)
