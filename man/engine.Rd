@@ -19,6 +19,9 @@ See details for more.}
 \item{.config}{an object of class \code{engine_config} as created with
 \code{\link[=new_config]{new_config()}}}
 }
+\value{
+an object of class \code{engine}.
+}
 \description{
 Create an encoding engine
 }

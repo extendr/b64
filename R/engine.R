@@ -21,6 +21,7 @@
 #'
 #'  See [base64 crate](https://docs.rs/base64/latest/base64/engine/general_purpose/index.html#constants) for more.
 #'
+#' @return an object of class `engine`.
 #' @export
 #' @examples
 #' engine()
