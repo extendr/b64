@@ -63,22 +63,86 @@ fn encode_file_(path: &str, engine: Robj) -> String {
     encoder.into_inner()
 }
 
-#[extendr]
-fn chunk_b64(encoded: String, size: i32) -> Strings {
-    if size % 4 != 0 {
+
+/// Utility Functions 
+/// 
+/// Functions to perform common tasks when working with base64 encoded strings.
+/// 
+/// @details
+/// 
+/// `b64_chunk()` splits a character vector of base64 encoded strings into chunks of a 
+/// specified width.
+/// 
+/// `b64_wrap()` wraps a character vector of base64 encoded strings with a newline character.
+/// 
+/// @returns
+/// 
+/// - `b64_chunk()` returns a list of character vectors.
+/// - `b64_wrap()` returns a scalar character vector.
+/// 
+/// @examples
+/// encoded <- encode("Hello, world!")
+/// chunked <- b64_chunk(encoded, 4)
+/// chunked
+/// 
+/// b64_wrap(chunked, "\n")
+/// @param width a numeric scalar defining the width of the chunks. Must be divisible by 4.
+/// @param encoded a character vector of base64 encoded strings.
+/// @export
+/// @rdname utils
+#[extendr(use_try_from = true)]
+fn b64_chunk(encoded: Strings, width: Either<i32, f64>) -> List {
+
+    let width = match width {
+        Left(l) => l,
+        Right(r) => r as i32,
+    };
+
+    if width % 4 != 0 {
         extendr_api::throw_r_error("Chunk size must be a multiple of 4.");
     }
-
     encoded
-        .chars()
-        .chunks(size as usize)
         .into_iter()
-        .map(|chunk| chunk.collect::<String>())
-        .collect::<Strings>()
+        .map(|s| {
+            if s.is_na() {
+                Strings::new(0)
+            } else {
+                s.chars()
+                    .chunks(width as usize)
+                    .into_iter()
+                    .map(|chunk| chunk.collect::<String>())
+                    .collect::<Strings>()
+            }
+        })
+        .collect::<List>()
 }
 
-#[extendr]
-fn line_wrap(chunks: Strings, newline: &str) -> String {
+
+/// @param chunks a character vector of base64 encoded strings.
+/// @param newline a character scalar defining the newline character.
+/// @export
+/// @rdname utils
+#[extendr(use_try_from = true)]
+fn b64_wrap(chunks: Either<List, Strings>, newline: &str) -> Strings {
+    match chunks {
+        Left(l) => l
+            .into_iter()
+            .map(|(_, s)| {
+                if s.is_na() {
+                    Rstr::na()
+                } else {
+                    let s = Strings::try_from(s).unwrap();
+                    Rstr::from(b64_wrap_(s, newline))
+                }
+            })
+            .collect::<Strings>(),
+        Right(r) => {
+            b64_wrap_(r, newline).into()
+        }
+    }
+}
+
+fn b64_wrap_(chunks: Strings, newline: &str) -> String {
     chunks.into_iter().join(newline)
 }
 
@@ -287,6 +351,6 @@ extendr_module! {
     fn print_config_;
 
     // helpers
-    fn chunk_b64;
-    fn line_wrap;
+    fn b64_chunk;
+    fn b64_wrap;
 }

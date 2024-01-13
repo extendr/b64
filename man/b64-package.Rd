@@ -4,9 +4,9 @@
 \name{b64-package}
 \alias{b64}
 \alias{b64-package}
-\title{b64: What the Package Does (One Line, Title Case)}
+\title{b64: Fast and Vectorized Base 64 Engine}
 \description{
-What the package does (one paragraph).
+Provides a fast, lightweight, and vectorized base 64 engine to encode and decode character and raw vectors as well as files stored on disk. Common base 64 alphabets are supported out of the box including the standard, URL-safe, bcrypt, crypt, 'BinHex', and IMAP-modified UTF-7 alphabets. Custom engines can be created to support unique base 64 encoding and decoding needs.
 }
 \author{
 \strong{Maintainer}: Josiah Parry \email{josiah.parry@gmail.com} (\href{https://orcid.org/0000-0001-9910-865X}{ORCID})
