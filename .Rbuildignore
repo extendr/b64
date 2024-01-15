@@ -5,3 +5,5 @@
 ^LICENSE\.md$
 ^src/rust/vendor$
 ^\.github$
+^cran-comments\.md$
+^CRAN-SUBMISSION$
