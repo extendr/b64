@@ -61,8 +61,6 @@ print_config_ <- function(config) .Call(wrap__print_config_, config)
 #' chunked
 #' 
 #' b64_wrap(chunked, "\n")
-#' 
-#' 
 #' @param width a numeric scalar defining the width of the chunks. Must be divisible by 4.
 #' @param encoded a character vector of base64 encoded strings.
 #' @export

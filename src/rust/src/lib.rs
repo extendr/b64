@@ -34,13 +34,9 @@ fn encode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Strings {
             })
             .collect::<Strings>(),
         Either::Right(r) => {
-            if !r.inherits("blob") {
-                throw_r_error("Expected a character vector or an object of class `blob`")
-            }
-
             r.into_iter()
                 .map(|(_, b)| {
-                    if b.is_null() {
+                    if !b.inherits("raw") | b.is_null() {
                         Rstr::na()
                     } else {
                         let raw: Raw = b.try_into().unwrap();
@@ -195,12 +191,11 @@ fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Robj {
             .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
             .unwrap(),
         Either::Right(r) => {
-            if !r.inherits("blob") {
-                throw_r_error("Expected a character vector or an object of class `blob`")
-            }
             r.into_iter()
                 .map(|(_, b)| {
-                    if b.is_null() {
+                    if !b.inherits("raw") {
+                        Rstr::na().into_robj()
+                    } else if b.is_null() {
                         ().into_robj()
                     } else {
                         let raw: Raw = b.try_into().unwrap();

@@ -39,6 +39,4 @@ chunked <- b64_chunk(encoded, 4)
 chunked
 
 b64_wrap(chunked, "\n")
-
-
 }
