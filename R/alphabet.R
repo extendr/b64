@@ -30,9 +30,9 @@
 #' new_alphabet("qwertyuiop[]asdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890")
 #' @returns an object of class `alphabet`
 alphabet <- function(which = "standard") {
-  rlang::arg_match(
+  match.arg(
     which,
-    values = c("standard", "bcrypt", "bin_hex", "crypt", "imap_mutf7", "url_safe")
+    choices = c("standard", "bcrypt", "bin_hex", "crypt", "imap_mutf7", "url_safe")
   )
   structure(alphabet_(which), class = "alphabet")
 }
@@ -42,10 +42,9 @@ alphabet <- function(which = "standard") {
 new_alphabet <- function(chars) {
   n <- nchar(chars)
   if (nchar(chars) != 64) {
-    cli::cli_abort(
-      c(
-        "{.arg chars} must be 64 unique characters",
-        "i" = "{n} characters provided"
+    stop(
+      paste(
+        "`chars` must contain 64 unique characters. Only", n, "characters were provided."
       )
     )
   }

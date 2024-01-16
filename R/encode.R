@@ -45,7 +45,7 @@ decode <- function(what, eng = engine()) {
 #' @name encode
 encode_file <- function(path, eng = engine()) {
   if (!file.exists(path)) {
-    cli::cli_abort("{.arg path} does not exist")
+    stop(paste0("`", path, "` does not exist"))
   }
 
   encode_file_(path, eng)
@@ -56,7 +56,7 @@ encode_file <- function(path, eng = engine()) {
 #' @rdname encode
 decode_file <- function(path, eng = engine()) {
   if (!file.exists(path)) {
-    cli::cli_abort("{.arg path} does not exist")
+    stop(paste0("`", path, "` does not exist"))
   }
 
   decode_file_(path, eng)

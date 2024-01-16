@@ -28,7 +28,7 @@
 #' new_engine(alphabet("bcrypt"), new_config())
 engine <- function(which = "standard") {
   provided <- c("standard", "standard_no_pad", "url_safe", "url_safe_no_pad")
-  rlang::arg_match0(which, provided)
+  match.arg(which, choices = provided)
   structure(engine_(which), class = "engine")
 }
 
@@ -36,18 +36,18 @@ engine <- function(which = "standard") {
 #' @rdname engine
 new_engine <- function(.alphabet = alphabet(), .config = new_config()) {
 
-  if (!rlang::inherits_only(.alphabet, "alphabet")) {
-    cli::cli_abort(
-      c(
-        "{.arg .alphabet} is not an object of class {.cls alphabet}",
-        "*" = "use {.fn alphabet} for a standard base64 alphabet"
+  if (!inherits(.alphabet, "alphabet")) {
+    stop(
+      paste(
+        "`.alphabet` is not an object of class 'alphabet'.\n" ,
+        "Use `alphabet()` for a standard base64 alphabet."
       )
     )
-  } else if (!rlang::inherits_only(.config, "engine_config")) {
-    cli::cli_abort(
-      c(
-        "{.arg config} is not a {.cls engine_config} object",
-        "*" = "create one with {.fn new_config}"
+  } else if (!inherits(.config, "engine_config")) {
+    stop(
+      paste(
+        "`.config` is not an object of class 'engine_config'.\n" ,
+        "Create one with `new_config()`."
       )
     )
   }

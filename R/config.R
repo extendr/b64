@@ -27,9 +27,9 @@ new_config <- function(
     decode_padding_mode = c("canonical", "indifferent", "none")
 ) {
 
-  padding_mode <- rlang::arg_match0(
+  padding_mode <- match.arg(
     decode_padding_mode,
-    values = c("canonical", "indifferent", "none")
+    choices = c("canonical", "indifferent", "none")
   )
 
   res <- new_config_(
