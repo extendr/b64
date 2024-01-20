@@ -23,7 +23,7 @@ fn encode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Strings {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
         Either::Left(s) => s
-            .into_iter()
+            .iter()
             .map(|s| {
                 if s.is_na() {
                     Rstr::na()
@@ -95,7 +95,7 @@ fn b64_chunk(encoded: Strings, width: Either<i32, f64>) -> List {
         extendr_api::throw_r_error("Chunk size must be a multiple of 4.");
     }
     encoded
-        .into_iter()
+        .iter()
         .map(|s| {
             if s.is_na() {
                 Strings::new(0)
@@ -133,7 +133,7 @@ fn b64_wrap(chunks: Either<List, Strings>, newline: &str) -> Strings {
 }
 
 fn b64_wrap_(chunks: Strings, newline: &str) -> String {
-    chunks.into_iter().join(newline)
+    chunks.iter().join(newline)
 }
 
 #[extendr(use_try_from = true)]
@@ -163,7 +163,7 @@ fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Robj {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
         Either::Left(s) => s
-            .into_iter()
+            .iter()
             .map(|s| {
                 if s.is_na() {
                     ().into_robj()
@@ -225,7 +225,7 @@ fn alphabet_(which: &str) -> ExternalPtr<alphabet::Alphabet> {
         "imap_mutf7" => ExternalPtr::new(alphabet::IMAP_MUTF7),
         "standard" => ExternalPtr::new(alphabet::STANDARD),
         "url_safe" => ExternalPtr::new(alphabet::URL_SAFE),
-        _ => extendr_api::throw_r_error(&format!("Unknown alphabet: {}", which)),
+        _ => extendr_api::throw_r_error(format!("Unknown alphabet: {}", which)),
     }
 }
 
@@ -236,7 +236,7 @@ fn new_alphabet_(chars: &str) -> ExternalPtr<alphabet::Alphabet> {
 
     match res {
         Ok(r) => ExternalPtr::new(r),
-        Err(e) => extendr_api::throw_r_error(&format!("Error creating alphabet: {}", e)),
+        Err(e) => extendr_api::throw_r_error(format!("Error creating alphabet: {}", e)),
     }
 }
 
@@ -261,7 +261,7 @@ fn new_config_(
         "indifferent" => DecodePaddingMode::Indifferent,
         "canonical" => DecodePaddingMode::RequireCanonical,
         "none" => DecodePaddingMode::RequireNone,
-        _ => extendr_api::throw_r_error(&format!("Unknown padding mode: {}", decode_padding_mode)),
+        _ => extendr_api::throw_r_error(format!("Unknown padding mode: {}", decode_padding_mode)),
     };
 
     let config = GeneralPurposeConfig::new()
@@ -285,7 +285,7 @@ fn engine_(which: &str) -> ExternalPtr<GeneralPurpose> {
         "standard_no_pad" => ExternalPtr::new(general_purpose::STANDARD_NO_PAD),
         "url_safe" => ExternalPtr::new(general_purpose::URL_SAFE),
         "url_safe_no_pad" => ExternalPtr::new(general_purpose::URL_SAFE_NO_PAD),
-        _ => extendr_api::throw_r_error(&format!("Unknown engine: {}", which)),
+        _ => extendr_api::throw_r_error(format!("Unknown engine: {}", which)),
     }
 }
 
