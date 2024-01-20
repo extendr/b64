@@ -40,9 +40,10 @@ hello <- encode("Hello, from extendr")
 hello
 ```
 
-Decode using `decode()`
+Decode using `decode()`. Note that the returned object will always have the `"blob"` class. To achieve 0 dependencies, the `blob` package is only listed as a suggested dependency but if you attach it, its print method will be used.
 
 ```{r}
+library(blob)
 decoded <- decode(hello)
 decoded
 ```
@@ -66,7 +67,7 @@ encoded <- encode(lorem)
 encoded
 ```
 
-We can decode all of these using `decode()` as well. This will always return a `blob` object.
+We can decode all of these using `decode()` as well.
 
 ```{r}
 decode(encoded)

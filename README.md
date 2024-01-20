@@ -31,16 +31,17 @@ hello
 #> [1] "SGVsbG8sIGZyb20gZXh0ZW5kcg=="
 ```
 
-Decode using `decode()`
+Decode using `decode()`. Note that the returned object will always have
+the `"blob"` class. To achieve 0 dependencies, the `blob` package is
+only listed as a suggested dependency but if you attach it, its print
+method will be used.
 
 ``` r
+library(blob)
 decoded <- decode(hello)
 decoded
-#> [[1]]
-#>  [1] 48 65 6c 6c 6f 2c 20 66 72 6f 6d 20 65 78 74 65 6e 64 72
-#> 
-#> attr(,"class")
-#> [1] "blob"          "vctrs_list_of" "vctrs_vctr"    "list"
+#> <blob[1]>
+#> [1] blob[19 B]
 ```
 
 We can convert the decoded base64 to characters and see how it worked.
@@ -57,50 +58,27 @@ Both `encode()` and `decode()` are vectorized.
 ``` r
 lorem <- unlist(lorem::ipsum(5, 1,  5))
 lorem
-#> [1] "Dolor malesuada cursus faucibus facilisi accumsan viverra?"   
-#> [2] "Sit penatibus lobortis at aptent pellentesque!"               
-#> [3] "Sit euismod accumsan semper ante cubilia nam velit himenaeos!"
-#> [4] "Lorem pulvinar augue aliquam!"                                
-#> [5] "Dolor nullam facilisi senectus penatibus."
+#> [1] "Elit porttitor litora phasellus primis."                        
+#> [2] "Sit vel natoque eu quisque."                                    
+#> [3] "Sit accumsan elementum pharetra aliquet parturient ullamcorper."
+#> [4] "Consectetur iaculis nunc elementum."                            
+#> [5] "Dolor donec iaculis sem."
 
 encoded <- encode(lorem)
 encoded
-#> [1] "RG9sb3IgbWFsZXN1YWRhIGN1cnN1cyBmYXVjaWJ1cyBmYWNpbGlzaSBhY2N1bXNhbiB2aXZlcnJhPw=="    
-#> [2] "U2l0IHBlbmF0aWJ1cyBsb2JvcnRpcyBhdCBhcHRlbnQgcGVsbGVudGVzcXVlIQ=="                    
-#> [3] "U2l0IGV1aXNtb2QgYWNjdW1zYW4gc2VtcGVyIGFudGUgY3ViaWxpYSBuYW0gdmVsaXQgaGltZW5hZW9zIQ=="
-#> [4] "TG9yZW0gcHVsdmluYXIgYXVndWUgYWxpcXVhbSE="                                            
-#> [5] "RG9sb3IgbnVsbGFtIGZhY2lsaXNpIHNlbmVjdHVzIHBlbmF0aWJ1cy4="
+#> [1] "RWxpdCBwb3J0dGl0b3IgbGl0b3JhIHBoYXNlbGx1cyBwcmltaXMu"                                
+#> [2] "U2l0IHZlbCBuYXRvcXVlIGV1IHF1aXNxdWUu"                                                
+#> [3] "U2l0IGFjY3Vtc2FuIGVsZW1lbnR1bSBwaGFyZXRyYSBhbGlxdWV0IHBhcnR1cmllbnQgdWxsYW1jb3JwZXIu"
+#> [4] "Q29uc2VjdGV0dXIgaWFjdWxpcyBudW5jIGVsZW1lbnR1bS4="                                    
+#> [5] "RG9sb3IgZG9uZWMgaWFjdWxpcyBzZW0u"
 ```
 
-We can decode all of these using `decode()` as well. This will always
-return a `blob` object.
+We can decode all of these using `decode()` as well.
 
 ``` r
 decode(encoded)
-#> [[1]]
-#>  [1] 44 6f 6c 6f 72 20 6d 61 6c 65 73 75 61 64 61 20 63 75 72 73 75 73 20 66 61
-#> [26] 75 63 69 62 75 73 20 66 61 63 69 6c 69 73 69 20 61 63 63 75 6d 73 61 6e 20
-#> [51] 76 69 76 65 72 72 61 3f
-#> 
-#> [[2]]
-#>  [1] 53 69 74 20 70 65 6e 61 74 69 62 75 73 20 6c 6f 62 6f 72 74 69 73 20 61 74
-#> [26] 20 61 70 74 65 6e 74 20 70 65 6c 6c 65 6e 74 65 73 71 75 65 21
-#> 
-#> [[3]]
-#>  [1] 53 69 74 20 65 75 69 73 6d 6f 64 20 61 63 63 75 6d 73 61 6e 20 73 65 6d 70
-#> [26] 65 72 20 61 6e 74 65 20 63 75 62 69 6c 69 61 20 6e 61 6d 20 76 65 6c 69 74
-#> [51] 20 68 69 6d 65 6e 61 65 6f 73 21
-#> 
-#> [[4]]
-#>  [1] 4c 6f 72 65 6d 20 70 75 6c 76 69 6e 61 72 20 61 75 67 75 65 20 61 6c 69 71
-#> [26] 75 61 6d 21
-#> 
-#> [[5]]
-#>  [1] 44 6f 6c 6f 72 20 6e 75 6c 6c 61 6d 20 66 61 63 69 6c 69 73 69 20 73 65 6e
-#> [26] 65 63 74 75 73 20 70 65 6e 61 74 69 62 75 73 2e
-#> 
-#> attr(,"class")
-#> [1] "blob"          "vctrs_list_of" "vctrs_vctr"    "list"
+#> <blob[5]>
+#> [1] blob[39 B] blob[27 B] blob[63 B] blob[35 B] blob[24 B]
 ```
 
 ## Encoding and decoding files
@@ -124,8 +102,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          76.9ms   79.8ms     12.6     24.1MB      0  
-#> 2 base64enc     189ms  199.7ms      5.07    66.9MB     10.1
+#> 1 b64          67.5ms   74.2ms     13.7     24.1MB     1.96
+#> 2 base64enc   177.9ms  183.3ms      5.50    66.9MB    11.0
 ```
 
 While the encoding is very impressive, better yet is the decoding
@@ -147,8 +125,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64            46ms   47.1ms     21.2     18.1MB     5.30
-#> 2 base64enc     308ms  314.1ms      3.18    18.1MB     0
+#> 1 b64          43.4ms   51.7ms     19.7     18.1MB     5.63
+#> 2 base64enc   356.7ms  373.3ms      2.68    18.1MB     0
 ```
 
 ## Alternative engines
@@ -178,8 +156,7 @@ We can use our new engine to decode it.
 ``` r
 decode(url_safe_encoded, url_engine)
 #> <blob[1]>
-#> [[1]]
-#> [1] fa ec 20 55
+#> [1] blob[4 B]
 ```
 
 ### Custom Engines
