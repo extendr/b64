@@ -43,7 +43,7 @@
     
     <a class="navbar-brand me-2" href="index.html">b64</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.svg" class="logo" alt=""><h1 id="b64">b64<a class="anchor" aria-label="anchor" href="#b64"></a>
+<img src="logo.svg" class="logo" alt=""><h1 id="b64-">b64 <a class="anchor" aria-label="anchor" href="#b64-"></a>
 </h1>
 </div>
 <!-- badges: start -->
@@ -95,9 +95,10 @@
 <span><span class="va">hello</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/encode.html">encode</a></span><span class="op">(</span><span class="st">"Hello, from extendr"</span><span class="op">)</span></span>
 <span><span class="va">hello</span></span>
 <span><span class="co">#&gt; [1] "SGVsbG8sIGZyb20gZXh0ZW5kcg=="</span></span></code></pre></div>
-<p>Decode using <code><a href="reference/encode.html">decode()</a></code></p>
+<p>Decode using <code><a href="reference/encode.html">decode()</a></code>. Note that the returned object will always have the <code>"blob"</code> class. To achieve 0 dependencies, the <code>blob</code> package is only listed as a suggested dependency but if you attach it, its print method will be used.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">decoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/encode.html">decode</a></span><span class="op">(</span><span class="va">hello</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://blob.tidyverse.org" class="external-link">blob</a></span><span class="op">)</span></span>
+<span><span class="va">decoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/encode.html">decode</a></span><span class="op">(</span><span class="va">hello</span><span class="op">)</span></span>
 <span><span class="va">decoded</span></span>
 <span><span class="co">#&gt; &lt;blob[1]&gt;</span></span>
 <span><span class="co">#&gt; [1] blob[19 B]</span></span></code></pre></div>
@@ -112,24 +113,24 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lorem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu">lorem</span><span class="fu">::</span><span class="fu">ipsum</span><span class="op">(</span><span class="fl">5</span>, <span class="fl">1</span>,  <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">lorem</span></span>
-<span><span class="co">#&gt; [1] "Sit ligula senectus litora viverra consequat."          </span></span>
-<span><span class="co">#&gt; [2] "Consectetur vulputate vivamus sapien a ridiculus porta."</span></span>
-<span><span class="co">#&gt; [3] "Ipsum orci cras posuere lacus."                         </span></span>
-<span><span class="co">#&gt; [4] "Lorem nostra hendrerit nascetur vel duis consequat."    </span></span>
-<span><span class="co">#&gt; [5] "Adipiscing dui blandit vestibulum bibendum?"</span></span>
+<span><span class="co">#&gt; [1] "Elit porttitor litora phasellus primis."                        </span></span>
+<span><span class="co">#&gt; [2] "Sit vel natoque eu quisque."                                    </span></span>
+<span><span class="co">#&gt; [3] "Sit accumsan elementum pharetra aliquet parturient ullamcorper."</span></span>
+<span><span class="co">#&gt; [4] "Consectetur iaculis nunc elementum."                            </span></span>
+<span><span class="co">#&gt; [5] "Dolor donec iaculis sem."</span></span>
 <span></span>
 <span><span class="va">encoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/encode.html">encode</a></span><span class="op">(</span><span class="va">lorem</span><span class="op">)</span></span>
 <span><span class="va">encoded</span></span>
-<span><span class="co">#&gt; [1] "U2l0IGxpZ3VsYSBzZW5lY3R1cyBsaXRvcmEgdml2ZXJyYSBjb25zZXF1YXQu"                </span></span>
-<span><span class="co">#&gt; [2] "Q29uc2VjdGV0dXIgdnVscHV0YXRlIHZpdmFtdXMgc2FwaWVuIGEgcmlkaWN1bHVzIHBvcnRhLg=="</span></span>
-<span><span class="co">#&gt; [3] "SXBzdW0gb3JjaSBjcmFzIHBvc3VlcmUgbGFjdXMu"                                    </span></span>
-<span><span class="co">#&gt; [4] "TG9yZW0gbm9zdHJhIGhlbmRyZXJpdCBuYXNjZXR1ciB2ZWwgZHVpcyBjb25zZXF1YXQu"        </span></span>
-<span><span class="co">#&gt; [5] "QWRpcGlzY2luZyBkdWkgYmxhbmRpdCB2ZXN0aWJ1bHVtIGJpYmVuZHVtPw=="</span></span></code></pre></div>
-<p>We can decode all of these using <code><a href="reference/encode.html">decode()</a></code> as well. This will always return a <code>blob</code> object.</p>
+<span><span class="co">#&gt; [1] "RWxpdCBwb3J0dGl0b3IgbGl0b3JhIHBoYXNlbGx1cyBwcmltaXMu"                                </span></span>
+<span><span class="co">#&gt; [2] "U2l0IHZlbCBuYXRvcXVlIGV1IHF1aXNxdWUu"                                                </span></span>
+<span><span class="co">#&gt; [3] "U2l0IGFjY3Vtc2FuIGVsZW1lbnR1bSBwaGFyZXRyYSBhbGlxdWV0IHBhcnR1cmllbnQgdWxsYW1jb3JwZXIu"</span></span>
+<span><span class="co">#&gt; [4] "Q29uc2VjdGV0dXIgaWFjdWxpcyBudW5jIGVsZW1lbnR1bS4="                                    </span></span>
+<span><span class="co">#&gt; [5] "RG9sb3IgZG9uZWMgaWFjdWxpcyBzZW0u"</span></span></code></pre></div>
+<p>We can decode all of these using <code><a href="reference/encode.html">decode()</a></code> as well.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/encode.html">decode</a></span><span class="op">(</span><span class="va">encoded</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;blob[5]&gt;</span></span>
-<span><span class="co">#&gt; [1] blob[45 B] blob[55 B] blob[30 B] blob[51 B] blob[43 B]</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] blob[39 B] blob[27 B] blob[63 B] blob[35 B] blob[24 B]</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -151,8 +152,8 @@
 <span><span class="co">#&gt; # A tibble: 2 × 6</span></span>
 <span><span class="co">#&gt;   expression      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 b64          39.8ms   41.3ms     24.0       24MB      0  </span></span>
-<span><span class="co">#&gt; 2 base64enc   112.1ms  115.2ms      8.56    66.5MB     17.1</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 b64          67.5ms   74.2ms     13.7     24.1MB     1.96</span></span>
+<span><span class="co">#&gt; 2 base64enc   177.9ms  183.3ms      5.50    66.9MB    11.0</span></span></code></pre></div>
 <p>While the encoding is very impressive, better yet is the decoding performance.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a temp file</span></span>
@@ -170,8 +171,8 @@
 <span><span class="co">#&gt; # A tibble: 2 × 6</span></span>
 <span><span class="co">#&gt;   expression      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 b64          16.1ms   16.8ms     56.1       18MB     9.34</span></span>
-<span><span class="co">#&gt; 2 base64enc   209.1ms  210.7ms      4.75      18MB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 b64          43.4ms   51.7ms     19.7     18.1MB     5.63</span></span>
+<span><span class="co">#&gt; 2 base64enc   356.7ms  373.3ms      2.68    18.1MB     0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="alternative-engines">Alternative engines<a class="anchor" aria-label="anchor" href="#alternative-engines"></a>
@@ -241,6 +242,7 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Josiah Parry <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9910-865X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
