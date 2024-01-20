@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# b64
+# b64 <img src="man/figures/logo.svg" align="right" height="139" alt="" />
 
 <!-- badges: start -->
 
@@ -31,9 +31,13 @@ hello
 #> [1] "SGVsbG8sIGZyb20gZXh0ZW5kcg=="
 ```
 
-Decode using `decode()`
+Decode using `decode()`. Note that the returned object will always have
+the `"blob"` class. To achieve 0 dependencies, the `blob` package is
+only listed as a suggested dependency but if you attach it, its print
+method will be used.
 
 ``` r
+library(blob)
 decoded <- decode(hello)
 decoded
 #> <blob[1]>
@@ -54,28 +58,27 @@ Both `encode()` and `decode()` are vectorized.
 ``` r
 lorem <- unlist(lorem::ipsum(5, 1,  5))
 lorem
-#> [1] "Sit ligula senectus litora viverra consequat."          
-#> [2] "Consectetur vulputate vivamus sapien a ridiculus porta."
-#> [3] "Ipsum orci cras posuere lacus."                         
-#> [4] "Lorem nostra hendrerit nascetur vel duis consequat."    
-#> [5] "Adipiscing dui blandit vestibulum bibendum?"
+#> [1] "Elit porttitor litora phasellus primis."                        
+#> [2] "Sit vel natoque eu quisque."                                    
+#> [3] "Sit accumsan elementum pharetra aliquet parturient ullamcorper."
+#> [4] "Consectetur iaculis nunc elementum."                            
+#> [5] "Dolor donec iaculis sem."
 
 encoded <- encode(lorem)
 encoded
-#> [1] "U2l0IGxpZ3VsYSBzZW5lY3R1cyBsaXRvcmEgdml2ZXJyYSBjb25zZXF1YXQu"                
-#> [2] "Q29uc2VjdGV0dXIgdnVscHV0YXRlIHZpdmFtdXMgc2FwaWVuIGEgcmlkaWN1bHVzIHBvcnRhLg=="
-#> [3] "SXBzdW0gb3JjaSBjcmFzIHBvc3VlcmUgbGFjdXMu"                                    
-#> [4] "TG9yZW0gbm9zdHJhIGhlbmRyZXJpdCBuYXNjZXR1ciB2ZWwgZHVpcyBjb25zZXF1YXQu"        
-#> [5] "QWRpcGlzY2luZyBkdWkgYmxhbmRpdCB2ZXN0aWJ1bHVtIGJpYmVuZHVtPw=="
+#> [1] "RWxpdCBwb3J0dGl0b3IgbGl0b3JhIHBoYXNlbGx1cyBwcmltaXMu"                                
+#> [2] "U2l0IHZlbCBuYXRvcXVlIGV1IHF1aXNxdWUu"                                                
+#> [3] "U2l0IGFjY3Vtc2FuIGVsZW1lbnR1bSBwaGFyZXRyYSBhbGlxdWV0IHBhcnR1cmllbnQgdWxsYW1jb3JwZXIu"
+#> [4] "Q29uc2VjdGV0dXIgaWFjdWxpcyBudW5jIGVsZW1lbnR1bS4="                                    
+#> [5] "RG9sb3IgZG9uZWMgaWFjdWxpcyBzZW0u"
 ```
 
-We can decode all of these using `decode()` as well. This will always
-return a `blob` object.
+We can decode all of these using `decode()` as well.
 
 ``` r
 decode(encoded)
 #> <blob[5]>
-#> [1] blob[45 B] blob[55 B] blob[30 B] blob[51 B] blob[43 B]
+#> [1] blob[39 B] blob[27 B] blob[63 B] blob[35 B] blob[24 B]
 ```
 
 ## Encoding and decoding files
@@ -99,8 +102,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          39.8ms   41.3ms     24.0       24MB      0  
-#> 2 base64enc   112.1ms  115.2ms      8.56    66.5MB     17.1
+#> 1 b64          67.5ms   74.2ms     13.7     24.1MB     1.96
+#> 2 base64enc   177.9ms  183.3ms      5.50    66.9MB    11.0
 ```
 
 While the encoding is very impressive, better yet is the decoding
@@ -122,8 +125,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          16.1ms   16.8ms     56.1       18MB     9.34
-#> 2 base64enc   209.1ms  210.7ms      4.75      18MB     0
+#> 1 b64          43.4ms   51.7ms     19.7     18.1MB     5.63
+#> 2 base64enc   356.7ms  373.3ms      2.68    18.1MB     0
 ```
 
 ## Alternative engines

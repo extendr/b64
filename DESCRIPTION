@@ -1,9 +1,11 @@
 Package: b64
 Title: Fast and Vectorized Base 64 Engine
-Version: 0.1.0
-Authors@R: 
+Version: 0.1.0.9000
+Authors@R: c(
     person("Josiah", "Parry", , "josiah.parry@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-9910-865X"))
+           comment = c(ORCID = "0000-0001-9910-865X")),
+    person("Etienne", "Bacher", email = "etienne.bacher@protonmail.com", role = "ctb",
+           comment = c(ORCID = "0000-0002-9271-5075")))
 Description: Provides a fast, lightweight, and vectorized base 64 engine
     to encode and decode character and raw vectors as well as files stored
     on disk.  Common base 64 alphabets are supported out of the box
@@ -14,13 +16,10 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Config/rextendr/version: 0.3.1.9000
 SystemRequirements: Cargo (Rust's package manager), rustc
-Imports: 
-    blob,
-    cli,
-    rlang
 Suggests: 
+    blob,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

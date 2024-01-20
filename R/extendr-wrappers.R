@@ -39,30 +39,28 @@ new_config_ <- function(encode_padding, decode_padding_trailing_bits, decode_pad
 
 print_config_ <- function(config) .Call(wrap__print_config_, config)
 
-#' Utility Functions 
-#' 
+#' Utility Functions
+#'
 #' Functions to perform common tasks when working with base64 encoded strings.
-#' 
+#'
 #' @details
-#' 
-#' `b64_chunk()` splits a character vector of base64 encoded strings into chunks of a 
+#'
+#' `b64_chunk()` splits a character vector of base64 encoded strings into chunks of a
 #' specified width.
-#' 
+#'
 #' `b64_wrap()` wraps a character vector of base64 encoded strings with a newline character.
-#' 
+#'
 #' @returns
-#' 
+#'
 #' - `b64_chunk()` returns a list of character vectors.
 #' - `b64_wrap()` returns a scalar character vector.
-#' 
+#'
 #' @examples
 #' encoded <- encode("Hello, world!")
 #' chunked <- b64_chunk(encoded, 4)
 #' chunked
-#' 
+#'
 #' b64_wrap(chunked, "\n")
-#' 
-#' 
 #' @param width a numeric scalar defining the width of the chunks. Must be divisible by 4.
 #' @param encoded a character vector of base64 encoded strings.
 #' @export

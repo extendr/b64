@@ -1,5 +1,4 @@
 #' @keywords internal
-#' @importFrom blob blob
 "_PACKAGE"
 
 ## usethis namespace: start
