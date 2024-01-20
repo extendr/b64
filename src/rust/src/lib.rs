@@ -23,7 +23,7 @@ fn encode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Strings {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
         Either::Left(s) => s
-            .iter()
+            .into_iter()
             .map(|s| {
                 if s.is_na() {
                     Rstr::na()
@@ -95,7 +95,7 @@ fn b64_chunk(encoded: Strings, width: Either<i32, f64>) -> List {
         extendr_api::throw_r_error("Chunk size must be a multiple of 4.");
     }
     encoded
-        .iter()
+        .into_iter()
         .map(|s| {
             if s.is_na() {
                 Strings::new(0)
@@ -133,7 +133,7 @@ fn b64_wrap(chunks: Either<List, Strings>, newline: &str) -> Strings {
 }
 
 fn b64_wrap_(chunks: Strings, newline: &str) -> String {
-    chunks.iter().join(newline)
+    chunks.into_iter().join(newline)
 }
 
 #[extendr(use_try_from = true)]
@@ -163,7 +163,7 @@ fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Robj {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
         Either::Left(s) => s
-            .iter()
+            .into_iter()
             .map(|s| {
                 if s.is_na() {
                     ().into_robj()
