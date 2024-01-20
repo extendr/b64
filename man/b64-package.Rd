@@ -12,5 +12,10 @@ Provides a fast, lightweight, and vectorized base 64 engine to encode and decode
 \author{
 \strong{Maintainer}: Josiah Parry \email{josiah.parry@gmail.com} (\href{https://orcid.org/0000-0001-9910-865X}{ORCID})
 
+Other contributors:
+\itemize{
+  \item Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID}) [contributor]
+}
+
 }
 \keyword{internal}

@@ -33,18 +33,17 @@ fn encode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Strings {
                 }
             })
             .collect::<Strings>(),
-        Either::Right(r) => {
-            r.into_iter()
-                .map(|(_, b)| {
-                    if !b.inherits("raw") | b.is_null() {
-                        Rstr::na()
-                    } else {
-                        let raw: Raw = b.try_into().unwrap();
-                        Rstr::from(eng.encode(raw.as_slice()))
-                    }
-                })
-                .collect::<Strings>()
-        }
+        Either::Right(r) => r
+            .into_iter()
+            .map(|(_, b)| {
+                if b.is_null() {
+                    Rstr::na()
+                } else {
+                    let raw: Raw = b.try_into().unwrap();
+                    Rstr::from(eng.encode(raw.as_slice()))
+                }
+            })
+            .collect::<Strings>(),
     }
 }
 
@@ -59,28 +58,27 @@ fn encode_file_(path: &str, engine: Robj) -> String {
     encoder.into_inner()
 }
 
-
-/// Utility Functions 
-/// 
+/// Utility Functions
+///
 /// Functions to perform common tasks when working with base64 encoded strings.
-/// 
+///
 /// @details
-/// 
-/// `b64_chunk()` splits a character vector of base64 encoded strings into chunks of a 
+///
+/// `b64_chunk()` splits a character vector of base64 encoded strings into chunks of a
 /// specified width.
-/// 
+///
 /// `b64_wrap()` wraps a character vector of base64 encoded strings with a newline character.
-/// 
+///
 /// @returns
-/// 
+///
 /// - `b64_chunk()` returns a list of character vectors.
 /// - `b64_wrap()` returns a scalar character vector.
-/// 
+///
 /// @examples
 /// encoded <- encode("Hello, world!")
 /// chunked <- b64_chunk(encoded, 4)
 /// chunked
-/// 
+///
 /// b64_wrap(chunked, "\n")
 /// @param width a numeric scalar defining the width of the chunks. Must be divisible by 4.
 /// @param encoded a character vector of base64 encoded strings.
@@ -88,7 +86,6 @@ fn encode_file_(path: &str, engine: Robj) -> String {
 /// @rdname utils
 #[extendr(use_try_from = true)]
 fn b64_chunk(encoded: Strings, width: Either<i32, f64>) -> List {
-
     let width = match width {
         Left(l) => l,
         Right(r) => r as i32,
@@ -113,7 +110,6 @@ fn b64_chunk(encoded: Strings, width: Either<i32, f64>) -> List {
         .collect::<List>()
 }
 
-
 /// @param chunks a character vector of base64 encoded strings.
 /// @param newline a character scalar defining the newline character.
 /// @export
@@ -132,9 +128,7 @@ fn b64_wrap(chunks: Either<List, Strings>, newline: &str) -> Strings {
                 }
             })
             .collect::<Strings>(),
-        Right(r) => {
-            b64_wrap_(r, newline).into()
-        }
+        Right(r) => b64_wrap_(r, newline).into(),
     }
 }
 
@@ -152,12 +146,10 @@ fn decode_(input: Either<String, Raw>, engine: Robj) -> Robj {
                 Ok(d) => d,
                 Err(e) => throw_r_error(e.to_string().as_str()),
             }
-        },
-        Either::Right(r) => {
-            match eng.decode(r.as_slice()) {
-                Ok(d) => d,
-                Err(e) => throw_r_error(e.to_string().as_str()),
-            }
+        }
+        Either::Right(r) => match eng.decode(r.as_slice()) {
+            Ok(d) => d,
+            Err(e) => throw_r_error(e.to_string().as_str()),
         },
     };
 
@@ -190,26 +182,24 @@ fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Robj {
             .collect::<List>()
             .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
             .unwrap(),
-        Either::Right(r) => {
-            r.into_iter()
-                .map(|(_, b)| {
-                    if !b.inherits("raw") {
-                        Rstr::na().into_robj()
-                    } else if b.is_null() {
-                        ().into_robj()
-                    } else {
-                        let raw: Raw = b.try_into().unwrap();
-                        let decoded = eng.decode(raw.as_slice());
+        Either::Right(r) => r
+            .into_iter()
+            .map(|(_, b)| {
+                let raw = Raw::try_from(b);
+                match raw {
+                    Ok(r) => {
+                        let decoded = eng.decode(r.as_slice());
                         match decoded {
                             Ok(d) => Raw::from_bytes(&d).into_robj(),
                             Err(_) => ().into_robj(),
                         }
                     }
-                })
-                .collect::<List>()
-                .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
-                .unwrap()
-        }
+                    Err(_) => ().into_robj(),
+                }
+            })
+            .collect::<List>()
+            .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
+            .unwrap(),
     }
 }
 
@@ -248,7 +238,6 @@ fn new_alphabet_(chars: &str) -> ExternalPtr<alphabet::Alphabet> {
         Ok(r) => ExternalPtr::new(r),
         Err(e) => extendr_api::throw_r_error(&format!("Error creating alphabet: {}", e)),
     }
-    
 }
 
 // get alphabet as a string for printing
