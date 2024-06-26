@@ -9,7 +9,7 @@ use extendr_api::prelude::*;
 use itertools::{Either, Itertools};
 use std::io::Read;
 
-#[extendr(use_try_from = true)]
+#[extendr]
 fn encode_(what: Either<String, Raw>, engine: Robj) -> String {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
@@ -18,7 +18,7 @@ fn encode_(what: Either<String, Raw>, engine: Robj) -> String {
     }
 }
 
-#[extendr(use_try_from = true)]
+#[extendr]
 fn encode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Strings {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
@@ -84,7 +84,7 @@ fn encode_file_(path: &str, engine: Robj) -> String {
 /// @param encoded a character vector of base64 encoded strings.
 /// @export
 /// @rdname utils
-#[extendr(use_try_from = true)]
+#[extendr]
 fn b64_chunk(encoded: Strings, width: Either<i32, f64>) -> List {
     let width = match width {
         Left(l) => l,
@@ -114,7 +114,7 @@ fn b64_chunk(encoded: Strings, width: Either<i32, f64>) -> List {
 /// @param newline a character scalar defining the newline character.
 /// @export
 /// @rdname utils
-#[extendr(use_try_from = true)]
+#[extendr]
 fn b64_wrap(chunks: Either<List, Strings>, newline: &str) -> Strings {
     match chunks {
         Left(l) => l
@@ -133,10 +133,10 @@ fn b64_wrap(chunks: Either<List, Strings>, newline: &str) -> Strings {
 }
 
 fn b64_wrap_(chunks: Strings, newline: &str) -> String {
-    chunks.into_iter().join(newline)
+    chunks.iter().join(newline)
 }
 
-#[extendr(use_try_from = true)]
+#[extendr]
 fn decode_(input: Either<String, Raw>, engine: Robj) -> Robj {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     let res = match input {
@@ -153,53 +153,71 @@ fn decode_(input: Either<String, Raw>, engine: Robj) -> Robj {
         },
     };
 
-    list!(Raw::from_bytes(&res))
+    let mut binding = list!(Raw::from_bytes(&res));
+    let res = binding
         .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
         .unwrap()
+        .clone();
+
+    res.into_robj()
 }
 
-#[extendr(use_try_from = true)]
+#[extendr]
 fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Robj {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
-        Either::Left(s) => s
-            .into_iter()
-            .map(|s| {
-                if s.is_na() {
-                    ().into_robj()
-                } else {
-                    let to_encode = s.as_str();
-                    let decoded = eng.decode(to_encode);
-                    match decoded {
-                        Ok(d) => {
-                            let r = Raw::from_bytes(&d);
-                            r.into_robj()
-                        }
-                        Err(_) => ().into_robj(),
-                    }
-                }
-            })
-            .collect::<List>()
-            .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
-            .unwrap(),
-        Either::Right(r) => r
-            .into_iter()
-            .map(|(_, b)| {
-                let raw = Raw::try_from(b);
-                match raw {
-                    Ok(r) => {
-                        let decoded = eng.decode(r.as_slice());
+        Either::Left(s) => {
+            let mut vals = s
+                .into_iter()
+                .map(|s| {
+                    if s.is_na() {
+                        ().into_robj()
+                    } else {
+                        let to_encode = s.as_str();
+                        let decoded = eng.decode(to_encode);
                         match decoded {
-                            Ok(d) => Raw::from_bytes(&d).into_robj(),
+                            Ok(d) => {
+                                let r = Raw::from_bytes(&d);
+                                r.into_robj()
+                            }
                             Err(_) => ().into_robj(),
                         }
                     }
-                    Err(_) => ().into_robj(),
-                }
-            })
-            .collect::<List>()
-            .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
-            .unwrap(),
+                })
+                .collect::<List>();
+
+            let binding = vals
+                .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
+                .unwrap()
+                .clone();
+
+            binding.into_robj()
+        }
+        Either::Right(r) => {
+            let mut vals = r
+                .into_iter()
+                .map(|(_, b)| {
+                    let raw = Raw::try_from(b);
+                    match raw {
+                        Ok(r) => {
+                            let decoded = eng.decode(r.as_slice());
+                            match decoded {
+                                Ok(d) => Raw::from_bytes(&d).into_robj(),
+                                Err(_) => ().into_robj(),
+                            }
+                        }
+                        Err(_) => ().into_robj(),
+                    }
+                })
+                .collect::<List>();
+
+            let binding = vals
+                .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
+                .unwrap()
+                .clone();
+
+            binding.into_robj()
+        }
     }
 }
 

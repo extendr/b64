@@ -5,10 +5,13 @@ version = '0.1.0'
 edition = '2021'
 
 [lib]
-crate-type = [ 'staticlib' ]
+crate-type = ['staticlib']
 name = 'b64'
 
 [dependencies]
 base64 = "0.21.7"
-extendr-api = {version = "*", features = ["either"]}
+extendr-api = { version = "*", features = ["either"] }
 itertools = "0.12.0"
+
+[patch.crates-io]
+extendr-api = { git = "https://github.com/extendr/extendr", branch = "extendr_is_singlethreaded" }
