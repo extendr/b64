@@ -23,3 +23,5 @@ Suggests:
     blob,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+URL: https://extendr.github.io/b64/, https://github.com/extendr/b64
+BugReports: https://github.com/extendr/b64/issues
