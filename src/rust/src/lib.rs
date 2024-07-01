@@ -9,7 +9,7 @@ use extendr_api::prelude::*;
 use itertools::{Either, Itertools};
 use std::io::Read;
 
-#[extendr(use_try_from = true)]
+#[extendr]
 fn encode_(what: Either<String, Raw>, engine: Robj) -> String {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
@@ -18,7 +18,7 @@ fn encode_(what: Either<String, Raw>, engine: Robj) -> String {
     }
 }
 
-#[extendr(use_try_from = true)]
+#[extendr]
 fn encode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Strings {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
@@ -84,7 +84,7 @@ fn encode_file_(path: &str, engine: Robj) -> String {
 /// @param encoded a character vector of base64 encoded strings.
 /// @export
 /// @rdname utils
-#[extendr(use_try_from = true)]
+#[extendr]
 fn b64_chunk(encoded: Strings, width: Either<i32, f64>) -> List {
     let width = match width {
         Left(l) => l,
@@ -114,7 +114,7 @@ fn b64_chunk(encoded: Strings, width: Either<i32, f64>) -> List {
 /// @param newline a character scalar defining the newline character.
 /// @export
 /// @rdname utils
-#[extendr(use_try_from = true)]
+#[extendr]
 fn b64_wrap(chunks: Either<List, Strings>, newline: &str) -> Strings {
     match chunks {
         Left(l) => l
@@ -136,8 +136,8 @@ fn b64_wrap_(chunks: Strings, newline: &str) -> String {
     chunks.into_iter().join(newline)
 }
 
-#[extendr(use_try_from = true)]
-fn decode_(input: Either<String, Raw>, engine: Robj) -> Robj {
+#[extendr]
+fn decode_(input: Either<String, Raw>, engine: Robj) -> List {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     let res = match input {
         Either::Left(s) => {
@@ -156,10 +156,11 @@ fn decode_(input: Either<String, Raw>, engine: Robj) -> Robj {
     list!(Raw::from_bytes(&res))
         .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
         .unwrap()
+        .clone()
 }
 
-#[extendr(use_try_from = true)]
-fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Robj {
+#[extendr]
+fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> List {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     match what {
         Either::Left(s) => s
@@ -181,7 +182,8 @@ fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Robj {
             })
             .collect::<List>()
             .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
-            .unwrap(),
+            .unwrap()
+            .clone(),
         Either::Right(r) => r
             .into_iter()
             .map(|(_, b)| {
@@ -199,7 +201,8 @@ fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> Robj {
             })
             .collect::<List>()
             .set_class(&["blob", "vctrs_list_of", "vctrs_vctr", "list"])
-            .unwrap(),
+            .unwrap()
+            .clone(),
     }
 }
 
