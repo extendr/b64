@@ -1,4 +1,4 @@
-# b64 0.1.5
+# b64 0.1.3
 
 * Addresses non API changes
 * All hard dependencies were removed (#2, @etiennebacher).
