@@ -8,15 +8,15 @@
 [![R-CMD-check](https://github.com/extendr/b64/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/extendr/b64/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of b64 is to provide a very fast, lightweight, and vectorized
-base64 encoder and decoder.
+b64 is a dependency, very fast, lightweight, and vectorized base64
+encoder and decoder.
 
 ## Installation
 
-You can install the development version of b64 like so:
+You can install b64 from CRAN with
 
 ``` r
-pak::pak("extendr/b64")
+install.packages("b64")
 ```
 
 ## Example
@@ -58,19 +58,19 @@ Both `encode()` and `decode()` are vectorized.
 ``` r
 lorem <- unlist(lorem::ipsum(5, 1,  5))
 lorem
-#> [1] "Elit porttitor litora phasellus primis."                        
-#> [2] "Sit vel natoque eu quisque."                                    
-#> [3] "Sit accumsan elementum pharetra aliquet parturient ullamcorper."
-#> [4] "Consectetur iaculis nunc elementum."                            
-#> [5] "Dolor donec iaculis sem."
+#> [1] "Consectetur in sapien interdum diam lobortis eros?"                  
+#> [2] "Lorem sed ligula fames?"                                             
+#> [3] "Adipiscing suscipit magna sapien varius."                            
+#> [4] "Elit tellus taciti turpis hendrerit sagittis."                       
+#> [5] "Sit suspendisse ultrices augue class parturient ultricies venenatis."
 
 encoded <- encode(lorem)
 encoded
-#> [1] "RWxpdCBwb3J0dGl0b3IgbGl0b3JhIHBoYXNlbGx1cyBwcmltaXMu"                                
-#> [2] "U2l0IHZlbCBuYXRvcXVlIGV1IHF1aXNxdWUu"                                                
-#> [3] "U2l0IGFjY3Vtc2FuIGVsZW1lbnR1bSBwaGFyZXRyYSBhbGlxdWV0IHBhcnR1cmllbnQgdWxsYW1jb3JwZXIu"
-#> [4] "Q29uc2VjdGV0dXIgaWFjdWxpcyBudW5jIGVsZW1lbnR1bS4="                                    
-#> [5] "RG9sb3IgZG9uZWMgaWFjdWxpcyBzZW0u"
+#> [1] "Q29uc2VjdGV0dXIgaW4gc2FwaWVuIGludGVyZHVtIGRpYW0gbG9ib3J0aXMgZXJvcz8="                        
+#> [2] "TG9yZW0gc2VkIGxpZ3VsYSBmYW1lcz8="                                                            
+#> [3] "QWRpcGlzY2luZyBzdXNjaXBpdCBtYWduYSBzYXBpZW4gdmFyaXVzLg=="                                    
+#> [4] "RWxpdCB0ZWxsdXMgdGFjaXRpIHR1cnBpcyBoZW5kcmVyaXQgc2FnaXR0aXMu"                                
+#> [5] "U2l0IHN1c3BlbmRpc3NlIHVsdHJpY2VzIGF1Z3VlIGNsYXNzIHBhcnR1cmllbnQgdWx0cmljaWVzIHZlbmVuYXRpcy4="
 ```
 
 We can decode all of these using `decode()` as well.
@@ -78,7 +78,7 @@ We can decode all of these using `decode()` as well.
 ``` r
 decode(encoded)
 #> <blob[5]>
-#> [1] blob[39 B] blob[27 B] blob[63 B] blob[35 B] blob[24 B]
+#> [1] blob[50 B] blob[23 B] blob[40 B] blob[45 B] blob[68 B]
 ```
 
 ## Encoding and decoding files
@@ -89,7 +89,7 @@ faster than the alternative.
 
 ``` r
 tmp <- tempfile() 
-fp <- "https://github.com/datablist/sample-csv-files/raw/main/files/leads/leads-100000.csv"
+fp <- "https://github.com/extendr/b64/blob/main/src/rust/vendor.tar.xz"
 
 download.file(fp, tmp)
 
@@ -97,13 +97,11 @@ bench::mark(
   b64 = encode_file(tmp),
   base64enc = base64enc::base64encode(tmp)
 )
-#> Warning: Some expressions had a GC in every iteration; so filtering is
-#> disabled.
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          67.5ms   74.2ms     13.7     24.1MB     1.96
-#> 2 base64enc   177.9ms  183.3ms      5.50    66.9MB    11.0
+#> 1 b64           334µs    340µs     2810.     218KB     0   
+#> 2 base64enc     905µs    938µs     1043.     729KB     4.22
 ```
 
 While the encoding is very impressive, better yet is the decoding
@@ -125,8 +123,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 b64          43.4ms   51.7ms     19.7     18.1MB     5.63
-#> 2 base64enc   356.7ms  373.3ms      2.68    18.1MB     0
+#> 1 b64        107.09µs  122.6µs     7414.     164KB     8.77
+#> 2 base64enc    1.58ms    1.6ms      602.     172KB     3.70
 ```
 
 ## Alternative engines

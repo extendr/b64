@@ -19,14 +19,14 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/extendr/b64/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/extendr/b64/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of b64 is to provide a very fast, lightweight, and vectorized base64 encoder and decoder. 
+b64 is a dependency, very fast, lightweight, and vectorized base64 encoder and decoder.
 
 ## Installation
 
-You can install the development version of b64 like so:
+You can install b64 from CRAN with
 
 ```r
-pak::pak("extendr/b64")
+install.packages("b64")
 ```
 
 ## Example
@@ -76,11 +76,11 @@ decode(encoded)
 
 ## Encoding and decoding files
 
-`b64` shines when encoding and decoding files. `encode_file()` and `decode_file()` both work by reading a file as a stream making it far faster than the alternative. 
+`b64` shines when encoding and decoding files. `encode_file()` and `decode_file()` both work by reading a file as a stream making it far faster than the alternative.
 
 ```{r message = FALSE, warn = FALSE}
 tmp <- tempfile() 
-fp <- "https://github.com/datablist/sample-csv-files/raw/main/files/leads/leads-100000.csv"
+fp <- "https://github.com/extendr/b64/blob/main/src/rust/vendor.tar.xz"
 
 download.file(fp, tmp)
 
