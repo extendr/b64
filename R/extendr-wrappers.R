@@ -6,7 +6,6 @@
 # This file was created with the following call:
 #   .Call("wrap__make_b64_wrappers", use_symbols = TRUE, package_name = "b64")
 
-#' @docType package
 #' @usage NULL
 #' @useDynLib b64, .registration = TRUE
 NULL

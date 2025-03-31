@@ -1,6 +1,6 @@
 Package: b64
 Title: Fast and Vectorized Base 64 Engine
-Version: 0.1.3
+Version: 0.1.4
 Authors@R: c(
     person("Josiah", "Parry", , "josiah.parry@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9910-865X")),
@@ -8,7 +8,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-9271-5075")))
 Description: Provides a fast, lightweight, and vectorized base 64 engine
     to encode and decode character and raw vectors as well as files stored
-    on disk.  Common base 64 alphabets are supported out of the box
+    on disk. Common base 64 alphabets are supported out of the box
     including the standard, URL-safe, bcrypt, crypt, 'BinHex', and
     IMAP-modified UTF-7 alphabets. Custom engines can be created to
     support unique base 64 encoding and decoding needs.
@@ -16,8 +16,8 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.0
-Config/rextendr/version: 0.3.1.9000
+RoxygenNote: 7.3.2
+Config/rextendr/version: 0.3.1.9001
 SystemRequirements: Cargo (Rust's package manager), rustc
 Suggests: 
     blob,
@@ -25,3 +25,5 @@ Suggests:
 Config/testthat/edition: 3
 URL: https://extendr.github.io/b64/, https://github.com/extendr/b64
 BugReports: https://github.com/extendr/b64/issues
+Depends: 
+    R (>= 4.2)
