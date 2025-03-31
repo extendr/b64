@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/extendr/b64/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/extendr/b64/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-b64 is a dependency, very fast, lightweight, and vectorized base64
+b64 is a dependency free, fast, lightweight, and vectorized base64
 encoder and decoder.
 
 ## Installation
