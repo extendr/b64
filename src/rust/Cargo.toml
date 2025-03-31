@@ -10,10 +10,13 @@ name = 'b64'
 
 [dependencies]
 base64 = "0.21.7"
-extendr-api = { version = "0.7.1", features = ["either"] }
+extendr-api = { version = "0.8.0", features = ["either"] }
 itertools = "0.12.0"
 
 
 [profile.release]
 lto = true
 codegen-units = 1
+
+[patch.crates-io]
+extendr-api = { git = "https://github.com/extendr/extendr"}

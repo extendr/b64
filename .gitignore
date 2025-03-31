@@ -3,3 +3,5 @@ CRAN-SUBMISSION
 src/rust/vendor
 src/vendor
 docs
+src/Makevars
+src/Makevars.win
