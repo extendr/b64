@@ -34,6 +34,16 @@ if (!is_not_cran) {
 .profile <- ifelse(is_debug, "", "--release")
 .clean_targets <- ifelse(is_debug, "", "$(TARGET_DIR)")
 
+# check for webR
+is_wasm <- R.version$platform == "wasm32-unknown-emscripten"
+
+if (is_wasm) {
+  message("Building for webR")
+}
+
+# use this to replace @TARGET@
+.target <- ifelse(is_wasm, "--target=wasm32-unknown-emscripten", "")
+
 # when we are using a debug build we need to use target/debug instead of target/release
 .libdir <- ifelse(is_debug, "debug", "release")
 
@@ -67,7 +77,8 @@ mv_txt <- readLines(mv_fp)
 new_txt <- gsub("@CRAN_FLAGS@", .cran_flags, mv_txt) |>
   gsub("@PROFILE@", .profile, x = _) |>
   gsub("@CLEAN_TARGET@", .clean_targets, x = _) |>
-  gsub("@LIBDIR@", .libdir, x = _)
+  gsub("@LIBDIR@", .libdir, x = _) |>
+  gsub("@TARGET@", .target, x = _)
 
 message("Writing `", mv_ofp, "`.")
 con <- file(mv_ofp, open = "wb")
