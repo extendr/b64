@@ -45,7 +45,14 @@ if (is_wasm) {
 .target <- ifelse(is_wasm, "--target=wasm32-unknown-emscripten", "")
 
 # when we are using a debug build we need to use target/debug instead of target/release
-.libdir <- ifelse(is_debug, "debug", "release")
+# if we're in wasm then we use wasm32-unknown-emscripten prefix
+.libdir <- if (is_wasm) {
+  "wasm32-unknown-emscripten/release"
+} else if (is_debug) {
+  "debug"
+} else {
+  "release"
+}
 
 # read in the Makevars.in file
 is_windows <- .Platform[["OS.type"]] == "windows"
