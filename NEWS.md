@@ -1,4 +1,4 @@
-# b64 (development version)
+# b64 0.1.6
 
 * Enables building in offline environments
 * Improves documentation
