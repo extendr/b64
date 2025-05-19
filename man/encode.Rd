@@ -39,14 +39,14 @@ Encode and decode using base64
 \details{
 \subsection{Encoding}{
 \itemize{
-\item \code{encode()} takes a character vector, list of raw vectors (or \link{blob} class), or a raw vector and encodes them into base64 strings.
+\item \code{encode()} takes a character vector, list of raw vectors (or blob class), or a raw vector and encodes them into base64 strings.
 \item \code{encode_file()} takes a path to a file and encodes it as a base64 string.
 }
 }
 
 \subsection{Decoding}{
 \itemize{
-\item \code{decode()} will decode either a base64 encoded character scalar, a raw vector, or a list of raw vectors (see \link{blob} package).
+\item \code{decode()} will decode either a base64 encoded character scalar, a raw vector, or a list of raw vectors (see blob package).
 \item \code{decode_file()} will decode a base64 encoded file into a raw vector.
 \item \code{decode_as_string()} is designed to decode a base64 encoded string to a utf-8 string. By default, it will decode a chunked base64 encoded strings using \verb{\\n} as the separator. Use the \code{newline} argument to determine how to split the input string prior to decoding.
 }

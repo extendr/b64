@@ -4,12 +4,12 @@
 #'
 #' ## Encoding
 #'
-#' - `encode()` takes a character vector, list of raw vectors (or [blob] class), or a raw vector and encodes them into base64 strings.
+#' - `encode()` takes a character vector, list of raw vectors (or blob class), or a raw vector and encodes them into base64 strings.
 #' - `encode_file()` takes a path to a file and encodes it as a base64 string.
 #'
 #' ## Decoding
 #'
-#' - `decode()` will decode either a base64 encoded character scalar, a raw vector, or a list of raw vectors (see [blob] package).
+#' - `decode()` will decode either a base64 encoded character scalar, a raw vector, or a list of raw vectors (see blob package).
 #' - `decode_file()` will decode a base64 encoded file into a raw vector.
 #' - `decode_as_string()` is designed to decode a base64 encoded string to a utf-8 string. By default, it will decode a chunked base64 encoded strings using `\n` as the separator. Use the `newline` argument to determine how to split the input string prior to decoding.
 #'
