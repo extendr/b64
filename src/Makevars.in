@@ -4,7 +4,6 @@ STATLIB = $(LIBDIR)/libb64.a
 PKG_LIBS = -L$(LIBDIR) -lb64
 
 all: $(SHLIB) rust_clean
-	rm -f $(CURDIR)/Makevars
 
 .PHONY: $(STATLIB)
 
@@ -40,4 +39,4 @@ rust_clean: $(SHLIB)
 	rm -Rf $(CARGOTMP) $(VENDOR_DIR) @CLEAN_TARGET@
 
 clean:
-	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR) $(VENDOR_DIR)
+	rm -Rf $(SHLIB) $(STATLIB) $(OBJECTS) $(TARGET_DIR)
