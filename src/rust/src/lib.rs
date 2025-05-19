@@ -207,6 +207,39 @@ fn decode_vectorized_(what: Either<Strings, List>, engine: Robj) -> List {
 }
 
 #[extendr]
+fn decode_as_string_(what: String, split: Option<String>, engine: Robj) -> Result<String> {
+    let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
+    match split {
+        Some(sp) => {
+            let res = what
+                .split(&sp)
+                .map(|split| {
+                    let bytes = eng
+                        .decode(split)
+                        .inspect_err(|_| throw_r_error("Failed to decode split"))
+                        .unwrap();
+
+                    String::from_utf8(bytes)
+                        .inspect_err(|_| throw_r_error("Failed to parse decoded bytes as a string"))
+                        .unwrap()
+                })
+                .collect::<String>();
+            Ok(res)
+        }
+        None => {
+            let res = eng
+                .decode(what)
+                .inspect_err(|_| throw_r_error("Failed to decode input string"))
+                .unwrap();
+            let res = String::from_utf8(res)
+                .inspect_err(|_| throw_r_error("Failed to parse decoded bytes to a string"))
+                .unwrap();
+            Ok(res)
+        }
+    }
+}
+
+#[extendr]
 fn decode_file_(path: &str, engine: Robj) -> Vec<u8> {
     let eng: ExternalPtr<GeneralPurpose> = engine.try_into().unwrap();
     let eng = eng.addr();
@@ -322,6 +355,7 @@ extendr_module! {
     fn decode_;
     fn decode_file_;
     fn decode_vectorized_;
+    fn decode_as_string_;
 
     // alphabets
     fn alphabet_;

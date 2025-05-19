@@ -22,6 +22,8 @@ decode_file_ <- function(path, engine) .Call(wrap__decode_file_, path, engine)
 
 decode_vectorized_ <- function(what, engine) .Call(wrap__decode_vectorized_, what, engine)
 
+decode_as_string_ <- function(what, split, engine) .Call(wrap__decode_as_string_, what, split, engine)
+
 alphabet_ <- function(which) .Call(wrap__alphabet_, which)
 
 new_alphabet_ <- function(chars) .Call(wrap__new_alphabet_, chars)
