@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">b64</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,14 +81,14 @@ and blob vector the same length as <code>what</code>, respectively.</p>
 <div class="section">
 <h3 id="encoding">Encoding<a class="anchor" aria-label="anchor" href="#encoding"></a></h3>
 
-<ul><li><p><code>encode()</code> takes a character vector, list of raw vectors (or <a href="https://blob.tidyverse.org/reference/blob.html" class="external-link">blob</a> class), or a raw vector and encodes them into base64 strings.</p></li>
+<ul><li><p><code>encode()</code> takes a character vector, list of raw vectors (or blob class), or a raw vector and encodes them into base64 strings.</p></li>
 <li><p><code>encode_file()</code> takes a path to a file and encodes it as a base64 string.</p></li>
 </ul></div>
 
 <div class="section">
 <h3 id="decoding">Decoding<a class="anchor" aria-label="anchor" href="#decoding"></a></h3>
 
-<ul><li><p><code>decode()</code> will decode either a base64 encoded character scalar, a raw vector, or a list of raw vectors (see <a href="https://blob.tidyverse.org/reference/blob.html" class="external-link">blob</a> package).</p></li>
+<ul><li><p><code>decode()</code> will decode either a base64 encoded character scalar, a raw vector, or a list of raw vectors (see blob package).</p></li>
 <li><p><code>decode_file()</code> will decode a base64 encoded file into a raw vector.</p></li>
 <li><p><code>decode_as_string()</code> is designed to decode a base64 encoded string to a utf-8 string. By default, it will decode a chunked base64 encoded strings using <code>\n</code> as the separator. Use the <code>newline</code> argument to determine how to split the input string prior to decoding.</p></li>
 </ul></div>
