@@ -19,9 +19,9 @@ checksum = "9d297deb1925b89f2ccc13d7635fa0714f12c87adce1c75356b39ca9b7178567"
 
 [[package]]
 name = "build-print"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a2128d00b7061b82b72844a351e80acd29e05afc60e9261e2ac90dca9ecc2ac"
+checksum = "0e3ea790c943031d0524fe9f16666666347722335ed7b562ca16a4a6486ea4e2"
 
 [[package]]
 name = "either"
@@ -32,7 +32,8 @@ checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 [[package]]
 name = "extendr-api"
 version = "0.8.0"
-source = "git+https://github.com/extendr/extendr#1a8fe4223d5deaab5ad50024246806559211a139"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cae12193370e4f00f4a54b64f40dabc753ad755f15229c367e4b5851ed206954"
 dependencies = [
  "either",
  "extendr-ffi",
@@ -44,7 +45,8 @@ dependencies = [
 [[package]]
 name = "extendr-ffi"
 version = "0.8.0"
-source = "git+https://github.com/extendr/extendr#1a8fe4223d5deaab5ad50024246806559211a139"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b48f96b7a4a2ff009ad9087f22a6de2312731a4096b520e3eb1c483df476ae95"
 dependencies = [
  "build-print",
 ]
@@ -52,7 +54,8 @@ dependencies = [
 [[package]]
 name = "extendr-macros"
 version = "0.8.0"
-source = "git+https://github.com/extendr/extendr#1a8fe4223d5deaab5ad50024246806559211a139"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fdbbac9afddafddb4dabd10aefa8082e3f057ec5bfa519c7b44af114e7ebf1a5"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -82,9 +85,9 @@ checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.94"
+version = "1.0.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a31971752e70b8b2686d7e46ec17fb38dad4051d94024c88df49b667caea9c84"
+checksum = "02b3e5e68a3a1a02aad3ec490a98007cbc13c37cbe84a3cd7b8e406d76e7f778"
 dependencies = [
  "unicode-ident",
 ]
@@ -100,9 +103,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.100"
+version = "2.0.101"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b09a44accad81e1ba1cd74a32461ba89dee89095ba17b32f5d03683b1b1fc2a0"
+checksum = "8ce2b7fc941b3a24138a0a7cf8e858bfc6a992e7978a068a5c760deb0ed43caf"
 dependencies = [
  "proc-macro2",
  "quote",
