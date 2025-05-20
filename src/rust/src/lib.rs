@@ -216,11 +216,11 @@ fn decode_as_string_(what: String, split: Option<String>, engine: Robj) -> Resul
                 .map(|split| {
                     let bytes = eng
                         .decode(split)
-                        .inspect_err(|_| throw_r_error("Failed to decode split"))
+                        .map_err(|_| throw_r_error("Failed to decode split"))
                         .unwrap();
 
                     String::from_utf8(bytes)
-                        .inspect_err(|_| throw_r_error("Failed to parse decoded bytes as a string"))
+                        .map_err(|_| throw_r_error("Failed to parse decoded bytes as a string"))
                         .unwrap()
                 })
                 .collect::<String>();
