@@ -16,4 +16,4 @@ jobs:
         with:
           tool: cargo-msrv
       - name: run cargo-msrv
-        run: cargo msrv --path ./src/rust/
+        run: cargo msrv verify --path ./src/rust/
