@@ -229,10 +229,10 @@ fn decode_as_string_(what: String, split: Option<String>, engine: Robj) -> Resul
         None => {
             let res = eng
                 .decode(what)
-                .inspect_err(|_| throw_r_error("Failed to decode input string"))
+                .map_err(|_| throw_r_error("Failed to decode input string"))
                 .unwrap();
             let res = String::from_utf8(res)
-                .inspect_err(|_| throw_r_error("Failed to parse decoded bytes to a string"))
+                .map_err(|_| throw_r_error("Failed to parse decoded bytes to a string"))
                 .unwrap();
             Ok(res)
         }
