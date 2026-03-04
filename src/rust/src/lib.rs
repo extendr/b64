@@ -5,7 +5,7 @@ use base64::{
     read::DecoderReader,
     write::EncoderStringWriter,
 };
-use extendr_api::prelude::*;
+use extendr_api::{error::Result, prelude::*};
 use itertools::{Either, Itertools};
 use std::io::Read;
 

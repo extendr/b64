@@ -9,9 +9,17 @@ rust-version = "1.65.0"
 crate-type = ["staticlib"]
 name = "b64"
 
+[[bin]]
+name = 'document'
+path = 'document.rs'
+
+
 [dependencies]
 base64 = "0.21.7"
-extendr-api = { version = "0.8.1", features = ["either"] }
+# extendr-api = { version = "0.8.1", features = ["either"] }
+extendr-api = { git = "https://github.com/kbvernon/extendr", features = [
+  "either",
+], branch = "simplify-wrappers" }
 itertools = "0.12.0"
 
 
