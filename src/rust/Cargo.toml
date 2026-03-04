@@ -6,7 +6,7 @@ edition = "2021"
 rust-version = "1.65.0"
 
 [lib]
-crate-type = ["staticlib"]
+crate-type = ["rlib", "staticlib"]
 name = "b64"
 
 [[bin]]
