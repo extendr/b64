@@ -18,9 +18,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macos-13,   r: 'devel'}
+          - {os: macos-26-intel, r: 'release'}
           - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
+          - {os: windows-11-arm, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
@@ -31,7 +32,7 @@ jobs:
       NOT_CRAN: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
       - uses: r-lib/actions/setup-pandoc@v2
 

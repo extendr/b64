@@ -18,12 +18,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9d297deb1925b89f2ccc13d7635fa0714f12c87adce1c75356b39ca9b7178567"
 
 [[package]]
-name = "build-print"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a2128d00b7061b82b72844a351e80acd29e05afc60e9261e2ac90dca9ecc2ac"
-
-[[package]]
 name = "either"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -31,9 +25,9 @@ checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 
 [[package]]
 name = "extendr-api"
-version = "0.8.1"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea54977c6e37236839ffcbc20b5dcea58aa32ae43fbef54a81e1011dc6b19061"
+checksum = "e002a15028421248374d3beb66d1802ce70d738b666a043a1f4dfffad14bc595"
 dependencies = [
  "either",
  "extendr-ffi",
@@ -44,18 +38,15 @@ dependencies = [
 
 [[package]]
 name = "extendr-ffi"
-version = "0.8.0"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b48f96b7a4a2ff009ad9087f22a6de2312731a4096b520e3eb1c483df476ae95"
-dependencies = [
- "build-print",
-]
+checksum = "acf3ace33b895bdfc13d02fd7486b26dc71078c256f3399f6272f8bd70fc3a1e"
 
 [[package]]
 name = "extendr-macros"
-version = "0.8.0"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fdbbac9afddafddb4dabd10aefa8082e3f057ec5bfa519c7b44af114e7ebf1a5"
+checksum = "f6b27baf9abffe403f3051efea3c19a0f315be9ec5f1c80efbade1aee5ccccbc"
 dependencies = [
  "proc-macro2",
  "quote",
